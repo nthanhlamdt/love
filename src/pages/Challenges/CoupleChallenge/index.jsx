@@ -1,15 +1,4 @@
-function CoupleChallenge({ setDailyChallenge, setSharedChallenge, sharedChallenge, handleChallengeComplete }) {
-  const handleEvidenceUpload = (challengeType, event) => {
-    const file = event.target.files[0]
-    if (file) {
-      console.log(`Đã upload bằng chứng cho ${challengeType}:`, file.name)
-      if (challengeType === 'shared') {
-        setSharedChallenge(prev => ({ ...prev, evidence: file.name }))
-      } else if (challengeType === 'daily') {
-        setDailyChallenge(prev => ({ ...prev, evidence: file.name }))
-      }
-    }
-  }
+function CoupleChallenge({ sharedChallenge, handleChallengeComplete, handleEvidenceUpload }) {
 
   return (
     <div className='bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'>
@@ -38,7 +27,7 @@ function CoupleChallenge({ setDailyChallenge, setSharedChallenge, sharedChalleng
               <span className='text-sm text-pink-600'>{sharedChallenge.evidence}</span>
             )}
           </div>
-          <button 
+          <button
             onClick={() => handleChallengeComplete('shared')}
             disabled={sharedChallenge.completed}
             className={`w-full py-2 rounded-md ${

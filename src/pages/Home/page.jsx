@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <div>
-      {dataTest?.users?.status === 'connected' ? <Heart user={dataTest.users} /> : <NotConnectedHomepage />}
+      {dataTest?.users?.status === 'connected' ? <Heart user={dataTest?.users} /> : <NotConnectedHomepage />}
     </div>
   )
 }

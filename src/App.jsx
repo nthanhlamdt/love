@@ -1,23 +1,24 @@
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar/index';
-import Home from './pages/Home/page';
-import Album from './pages/Album/page';
-import Celebrate from './pages/Celebrate/page';
-import Challenges from './pages/Challenges/page';
-import Cooking from './pages/Cooking/page';
-import Learning from './pages/Learning/page';
-import TimeCapsule from './pages/TimeCapsule/page';
-import VirtualGifts from './pages/VirtualGifts/page';
-import PostPicture from './pages/PostPicture/page';
-import Login from './pages/Auth/Login/page';
-import Signup from './pages/Auth/Signup/page';
-import { Toaster } from 'react-hot-toast';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Navbar from './components/Navbar/index'
+import Home from './pages/Home/page'
+import Album from './pages/Album/page'
+import Celebrate from './pages/Celebrate/page'
+import Challenges from './pages/Challenges/page'
+import Cooking from './pages/Cooking/page'
+import Learning from './pages/Learning/page'
+import TimeCapsule from './pages/TimeCapsule/page'
+import VirtualGifts from './pages/VirtualGifts/page'
+import PostPicture from './pages/PostPicture/Camera'
+import Login from './pages/Auth/Login/page'
+import Signup from './pages/Auth/Signup/page'
+import { Toaster } from 'react-hot-toast'
 // import { useAuthContext } from './context/authContext'
-import { dataTest } from '../Data/DATATEST';
+import { dataTest } from '../Data/DATATEST'
+import ImagesAlbum from './pages/Album/ImagesAlbum'
 
 function App() {
-  const location = useLocation();
-  // const { authUser } = useAuthContext();
+  const location = useLocation()
+  // const { authUser } = useAuthContext()
 
   return (
     <div className='flex flex-col h-screen'>
@@ -39,12 +40,13 @@ function App() {
           <Route path='/virtualGifts' element={<VirtualGifts />} />
           <Route path='/postPicture' element={<PostPicture />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/albums/imagesAlbum' element={<ImagesAlbum />} />
           {/* <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />} /> */}
         </Routes>
       </div>
       <Toaster />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

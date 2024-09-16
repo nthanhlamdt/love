@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import 'tailwindcss/tailwind.css'
+import { useNavigate } from 'react-router-dom'
 import CardAlbum from './CardAlbum'
-
 import ModalCreateAlbum from './ModalCreateAlbum'
-import ModalImageAlbum from './ModalImageAlbum'
 import HeaderAlbum from './HeaderAlbum'
+import ImagesAlbum from './ImagesAlbum'
 
 const dataAlbums = [
   {
@@ -32,6 +32,7 @@ const dataAlbums = [
 ]
 
 const MemoryAlbum = () => {
+  const Navigate = useNavigate()
   const [albums, setAlbums] = useState(dataAlbums)
 
   const [selectedAlbum, setSelectedAlbum] = useState(null)
@@ -43,7 +44,7 @@ const MemoryAlbum = () => {
   }
 
   return (
-    <div className='mx-auto p-8 rounded-lg container'>
+    <div className='mx-auto px-8 rounded-lg container'>
       <HeaderAlbum />
 
       {/* Danh Sách Album Ảnh */}
@@ -60,12 +61,7 @@ const MemoryAlbum = () => {
 
       {/* Modal Hiển Thị Các Ảnh Trong Album */}
       {selectedAlbum && (
-        <ModalImageAlbum
-          selectedAlbum={selectedAlbum}
-          setSelectedAlbum={setSelectedAlbum}
-          albums={albums}
-          setAlbums={setAlbums}
-        />
+        Navigate('/albums/imagesAlbum')
       )}
 
       {/* Thêm Album Mới */}
