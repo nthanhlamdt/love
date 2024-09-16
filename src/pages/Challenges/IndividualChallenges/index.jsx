@@ -1,4 +1,4 @@
-function IndividualChallenges({ setDailyChallenge }) {
+function IndividualChallenges({ setDailyChallenge, dailyChallenge, handleEvidenceUpload, handleChallengeComplete }) {
   const generateNewDailyChallenge = () => {
     setDailyChallenge({
       title: 'Thử thách mới: Nấu bữa tối cùng nhau',
@@ -35,7 +35,7 @@ function IndividualChallenges({ setDailyChallenge }) {
             )}
           </div>
           <div className='flex space-x-2'>
-            <button 
+            <button
               onClick={() => handleChallengeComplete('daily')}
               disabled={dailyChallenge.completed}
               className={`flex-1 py-2 rounded-md ${

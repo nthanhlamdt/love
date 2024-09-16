@@ -30,7 +30,18 @@ export default function Challenges() {
     { title: 'Đi dạo trong công viên', date: '2023-06-03', type: 'shared' }
   ])
 
-  
+  const handleEvidenceUpload = (challengeType, event) => {
+    const file = event.target.files[0]
+    if (file) {
+      console.log(`Đã upload bằng chứng cho ${challengeType}:`, file.name)
+      if (challengeType === 'shared') {
+        setSharedChallenge(prev => ({ ...prev, evidence: file.name }))
+      } else if (challengeType === 'daily') {
+        setDailyChallenge(prev => ({ ...prev, evidence: file.name }))
+      }
+    }
+  }
+
   const handleChallengeComplete = (challengeType) => {
     if (challengeType === 'shared' && sharedChallenge.evidence) {
       setSharedChallenge(prev => ({ ...prev, completed: true }))
@@ -52,12 +63,9 @@ export default function Challenges() {
       alert('Vui lòng upload bằng chứng trước khi hoàn thành thử thách!')
     }
   }
-  
-
-  
 
   return (
-    <div className='container m-auto'>
+    <div className='container m-auto md:px-16 px-7'>
       <div>
         <h1 className='text-4xl font-bold text-center mb-12 text-pink-600 animate-pulse'>
           ❤️ Thử Thách Tình Yêu ❤️
@@ -70,12 +78,18 @@ export default function Challenges() {
             setDailyChallenge={setDailyChallenge}
             setSharedChallenge={setSharedChallenge}
             sharedChallenge= {sharedChallenge}
-            handleChallengeComplete= {handleChallengeComplete}
+            handleChallengeComplete={handleChallengeComplete}
+            handleEvidenceUpload={ handleEvidenceUpload }
           />
 
-          <IndividualChallenges setDailyChallenge={setDailyChallenge}/>
+          <IndividualChallenges
+            setDailyChallenge={setDailyChallenge}
+            dailyChallenge={dailyChallenge}
+            handleEvidenceUpload={handleEvidenceUpload}
+            handleChallengeComplete={ handleChallengeComplete }
+          />
 
-          <CompletedChallenges />
+          <CompletedChallenges history={ history } />
         </div>
       </div>
     </div>

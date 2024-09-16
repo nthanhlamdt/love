@@ -1,4 +1,4 @@
-function CompletedChallenges() {
+function CompletedChallenges({ history }) {
 
   return (
     <div className='md:col-span-2 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden'>

@@ -280,7 +280,7 @@ const HeartCanvas = ({ user }) => {
         context.textAlign = 'center'
         context.textBaseline = 'top'
         context.fillText(`${user.dateBirth}`, canvas.width / 2 - 170 + avatarSize / 2, canvas.height / 2 + 140 + avatarSize + 10)
-        context.fillText(`${user.gender === 'Nam'? '♂' : '♀'} ${getZodiacSign(user.dateBirth)}`, canvas.width / 2 - 180 + avatarSize / 2, canvas.height / 2 + 140 + avatarSize + 30)
+        context.fillText(`${user.gender === 'Nam' ? '♂' : '♀'} ${getZodiacSign(user.dateBirth)}`, canvas.width / 2 - 180 + avatarSize / 2, canvas.height / 2 + 140 + avatarSize + 30)
       }
 
       if (avatar2.complete) {
