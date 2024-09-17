@@ -36,7 +36,59 @@ export const dataTest = {
       dateBirth: '09-02-2004'
     },
     loveDay: '05-03-2021'
-  }
+  },
+
+  dataAlbums: [
+    {
+      id: '1',
+      title: 'Chuyến Đi Đà Nẵng',
+      description: 'Album lưu giữ những kỷ niệm đáng nhớ tại Đà Nẵng.',
+      photos: [
+        {
+          id: '1',
+          url: 'https://wall.vn/wp-content/uploads/2020/04/cau-rong-da-nang.jpg',
+          caption: 'Bãi biển Mỹ Khê 1'
+        },
+        {
+          id: '2',
+          url: 'https://tse1.mm.bing.net/th?id=OIP.4jkr166tnHgMY8lfjBVSEQHaE8&pid=Api&P=0&h=180',
+          caption: 'Cầu Rồng 2'
+        },
+        {
+          id: '3',
+          url: 'https://tse4.mm.bing.net/th?id=OIP.NOMdYPhklK0BSV5IphLqwQHaD-&pid=Api&P=0&h=180',
+          caption: 'Bảo tàng Chăm 3'
+        }
+      ]
+    },
+    {
+      id: '2',
+      title: 'Chuyến Đi Đà Nẵng',
+      description: 'Album lưu giữ những kỷ niệm đáng nhớ tại Đà Nẵng.',
+      photos: [
+        {
+          id: '1',
+          url: 'https://tse1.mm.bing.net/th?id=OIP.DstSUFfUUyV7qa9G0AemdAHaE7&pid=Api&P=0&h=180',
+          caption: 'Bãi biển Mỹ Khê 4'
+        },
+        {
+          id: '2',
+          url: 'https://wall.vn/wp-content/uploads/2020/04/cau-rong-da-nang.jpg',
+          caption: 'Cầu Rồng 5 '
+        },
+        {
+          id: '3',
+          url: 'https://tse1.mm.bing.net/th?id=OIP.xBERqQB3zd9X4qs0wjsPdQHaEh&pid=Api&P=0&h=180',
+          caption: 'Bảo tàng Chăm 6'
+        },
+        {
+          id: '4',
+          url: 'https://tse1.mm.bing.net/th?id=OIP.xBERqQB3zd9X4qs0wjsPdQHaEh&pid=Api&P=0&h=180',
+          caption: 'Bảo tàng Chăm 6'
+        }
+      ]
+    }
+  ]
 }
 
 // {

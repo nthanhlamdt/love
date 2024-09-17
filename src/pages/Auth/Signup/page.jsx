@@ -19,7 +19,6 @@ function Page() {
 
   const submitFormSignUp = async (e) => {
     e.preventDefault()
-    console.log(data)
     const regex = /^(0[3|5|7|8|9])+([0-9]{8})$/
     if (!data.username || !data.password || !data.confirmPassword
       || !data.fullName || !data.gender || !data.phoneNumber) {
