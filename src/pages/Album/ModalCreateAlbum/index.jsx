@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import FileUpload from '../../../components/FileUpload/index'
+import toast from 'react-hot-toast'
 
 function ModalCreateAlbum({ albums, setAlbums }) {
   const [newAlbum, setNewAlbum] = useState({ title: '', description: '' })
@@ -7,7 +8,14 @@ function ModalCreateAlbum({ albums, setAlbums }) {
   const imageDropdownRef = useRef(null)
 
   const handleAddAlbum = () => {
-    if (newAlbum.title && newAlbum.description) {
+    if (!newAlbum.title) {
+      toast.error('Vui lòng nhập tiêu đề albums')
+    }
+
+    else if (!newAlbum.description) {
+      toast.error('Vui lòng nhập mô tả albums')
+    }
+    else {
       const newAlbumObj = {
         id: albums.length + 1,
         title: newAlbum.title,
@@ -16,6 +24,7 @@ function ModalCreateAlbum({ albums, setAlbums }) {
       }
       setAlbums([...albums, newAlbumObj])
       setNewAlbum({ title: '', description: '' })
+      toast.success('Tạo albums thành công')
     }
   }
 

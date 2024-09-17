@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+
 import Navbar from './components/Navbar/index'
 import Home from './pages/Home/page'
 import Album from './pages/Album/page'
@@ -14,7 +15,7 @@ import Signup from './pages/Auth/Signup/page'
 import { Toaster } from 'react-hot-toast'
 // import { useAuthContext } from './context/authContext'
 import { dataTest } from '../Data/DATATEST'
-import ImagesAlbum from './pages/Album/ImagesAlbum'
+import PresentlyAlbum from './pages/Album/PresentlyAlbum'
 
 function App() {
   const location = useLocation()
@@ -40,11 +41,19 @@ function App() {
           <Route path='/virtualGifts' element={<VirtualGifts />} />
           <Route path='/postPicture' element={<PostPicture />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/albums/imagesAlbum' element={<ImagesAlbum />} />
+          <Route path="/albums/presently_album/:id" element={<PresentlyAlbum />} />
           {/* <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />} /> */}
         </Routes>
       </div>
-      <Toaster />
+      <Toaster
+        className="z-[9999]"
+        toastOptions={{
+          className: 'z-[9999]', // Đặt z-index cao và thêm position
+          style: {} // Có thể để trống hoặc tùy chỉnh
+        }}
+        containerClassName="z-[9999]" // Đảm bảo Toaster container cũng có z-index cao và vị trí cố định
+      />
+
     </div>
   )
 }
