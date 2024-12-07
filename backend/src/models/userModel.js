@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Role = require('./roleModel')
 
 const UserSchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 6},
@@ -7,16 +8,7 @@ const UserSchema = new mongoose.Schema({
   avatar: { type: String, maxlength: 200, default: null },
   gender: { type: String, enum: ['Nam', 'Nữ', 'Khác'], required: true },
   dateBirth: { type: Date, required: true },
-  status: { type: String, enum: ['pending', 'inactive'], default: 'inactive' },
-  pending_request_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null
-  },
-  loveDay: {
-    type: Date,
-    default: null
-  }
+  role: {type: mongoose.Schema.Types.ObjectId, ref: Role, require: true}
 }, { timestamps: true })
 
 const user = mongoose.model('User', UserSchema)

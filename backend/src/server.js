@@ -1,50 +1,36 @@
-const express = require('express')
-const connectDB = require('./config/db')
-
-const cors = require('cors')
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser')
-
-const authRoutes = require('./routes/authRoutes')
-const userRoutes = require('./routes/userRoutes')
-const notificationsRoutes = require('./routes/notificationsRoutes')
-const albumsRoutes = require('./routes/albumsRoutes')
-
-require('dotenv').config();
-
-const runServer = () => {
-  const app = express();
-  const PORT = process.env.PORT || 3000;
-
-  app.use(cors({
-      origin: 'http://localhost:5173', // Chỉ cho phép miền này
-      credentials: true, // Nếu bạn muốn gửi cookie hoặc HTTP Authentication
-    }));
-
-    app.use((req, res, next) => {
-      res.setHeader("Content-Security-Policy", "script-src 'self'");
-      next();
-    });
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+dotenv.config();
 
 
-    app.use(bodyParser.json());
-    app.use(cookieParser());
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const notificationRoutes = require('./routes/notificationsRoutes');
 
-    app.use('/api/auth', authRoutes);
-    app.use('/api/user', userRoutes);
-    app.use('/api/notification', notificationsRoutes);
-    app.use('/api/albums', albumsRoutes)
+const albumsRoutes = require('./routes/albumsRoutes');
+const { app, server } = require("./socket/socket");
 
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}
-connectDB()
-  .then(() => {
-    runServer()
-  })
+const connectDB = require('./config/db');
 
-  .catch(error => {
-    console.error('Server error: ', error)
-  })
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
+}));
 
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/notification', notificationRoutes);
+app.use('/api/albums', albumsRoutes);
+
+connectDB().then(() => {
+  server.listen(process.env.PORT, () => {
+    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+  });
+}).catch(error => {
+  console.error('Server error:', error);
+});

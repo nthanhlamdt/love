@@ -1,9 +1,10 @@
 const express = require('express')
 const authenticateToken = require('../middleware/authMiddleware')
-const { getUser, setLoveUser } = require('../controllers/userController')
+const { setLoveUser, getCoupleUser } = require('../controllers/userController')
 const router = express.Router()
 
-router.get('/', authenticateToken, getUser)
-router.post('/setlove', authenticateToken, setLoveUser)
+router
+  .post('/setlove', authenticateToken, setLoveUser)
+  .get('/setlove', authenticateToken, getCoupleUser)
 
 module.exports = router

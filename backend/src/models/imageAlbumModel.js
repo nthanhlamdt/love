@@ -3,7 +3,7 @@ const albums = require('./albumsModel')
 const user = require('./userModel')
 
 const imageAlbumSchema = new mongoose.Schema({
-  albumID: {
+  albumId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: albums,
     required: true 
@@ -13,21 +13,23 @@ const imageAlbumSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
-  description: {
+  
+  name: {
     type: String,
     required: true,
     minlength: 1,
-    maxlength: 150
   },
 
-  
   location: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 50
+    minlength: 1,
+  },
+  time: {
+    type: Date,
+    required: true
   }
+  ,
 }, { timestamps: true })
 
 const imageAlbum = mongoose.model('ImageAlbum', imageAlbumSchema)
