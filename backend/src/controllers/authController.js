@@ -70,6 +70,7 @@ const login = async (req, res) => {
     if (userStatusPending) status = 'pending'
 
     let userPending = user.toObject()
+    console.log(userPending)
 
     res.status(200).json({
       token,

@@ -8,10 +8,10 @@ export default defineConfig({
   base: './',
 
   server: {
-    host: true, // Cho phép kết nối từ mạng khác
+    host: '0.0.0.0', // Cho phép kết nối từ mọi địa chỉ IP trong mạng LAN
     port: 5173, // Cổng mà bạn muốn sử dụng
     hmr: {
-      overlay: false
+      overlay: false // Tắt overlay lỗi nếu không muốn hiển thị lỗi trong trình duyệt
     }
   },
 

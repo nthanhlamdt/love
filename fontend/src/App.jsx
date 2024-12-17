@@ -18,6 +18,7 @@ import Footer from './components/Footer'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Message from './components/Message'
 import PageRecipeCooking from './pages/Cooking/PageRecipeCooking'
+import MemoriesPage from './pages/Celebrate/Calendar/MonthCalendar/MemoriesPage'
 
 function App() {
   const location = useLocation()
@@ -27,9 +28,7 @@ function App() {
     <div className='flex flex-col justify-between h-screen'>
       {/* Navbar luôn nằm ở trên cùng */}
       {location.pathname !== '/signup' && location.pathname !== '/login' && (
-        <Navbar
-          className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md"
-          user={authUser} />
+        <Navbar user={authUser} />
       )}
 
       {authUser?.status == 'pending' && <Message />}
@@ -46,6 +45,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path="/album/:id" element={<ProtectedRoute element={<ImagesAlbum />} authUser={authUser} />} />
           <Route path="/cooking/:id" element={<ProtectedRoute element={<PageRecipeCooking />} authUser={authUser} />} />
+          <Route path="/celebrate/:id" element={<ProtectedRoute element={<MemoriesPage />} authUser={authUser} />} />
         </Routes>
       </div>
       <Footer />

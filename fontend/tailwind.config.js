@@ -8,17 +8,18 @@ export default {
     './src/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        handwriting: ['Dancing Script', 'cursive'],
-        lovelight: ['Love Light', 'cursive']
-      }
-    }
+		extend: {
+			fontFamily: {
+				handwriting: ['Dancing Script', 'cursive'],
+				lovelight: ['Love Light', 'cursive']
+			}
+  	}
   },
   plugins: [
     daisyui,
     aspect,
-    animated
-  ]
+    animated,
+    require('tailwindcss-animate')
+	]
 }
 

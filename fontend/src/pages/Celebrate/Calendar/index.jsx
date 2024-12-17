@@ -1,6 +1,5 @@
 import MonthCalendar from './MonthCalendar'
 import ImagesCalendar from './ImagesCalendar'
-import { Heart } from 'lucide-react'
 import ModalCreateCalendar from './ModalCreateCalendar'
 import { useState } from 'react'
 

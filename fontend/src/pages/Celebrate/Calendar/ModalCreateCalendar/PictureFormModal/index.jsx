@@ -7,11 +7,11 @@ export default function PictureFormModal({ data, setData }) {
   const fileInputRef = useRef(null)
 
   const handelFileImageChange = (e) => {
-    const file = e.target.files[0] // Lấy ảnh đầu tiên
+    const file = e.target.files[0]
     if (file) {
       const newImage = URL.createObjectURL(file)
       setImage(newImage)
-      setData({ ...data, picture: file })
+      setData({ ...data, image: file })
     }
   }
 
@@ -60,7 +60,7 @@ export default function PictureFormModal({ data, setData }) {
           checked={checkBoxRepect}
           onChange={() => {
             setCheckBoxRepect(!checkBoxRepect)
-            setData({ ...data, wishFuture: '' })
+            setData({ ...data, repeat: !checkBoxRepect })
           }}
         />
         <Repeat className="inline-block w-4 h-4 mr-1 ml-2" />
@@ -75,7 +75,7 @@ export default function PictureFormModal({ data, setData }) {
 
           <textarea
             rows={3}
-            onChange={e => setData({ ...data, wishFuture: e.target.value })}
+            onChange={e => setData({ ...data, dreaming: e.target.value, repeat: true })}
             placeholder="Bạn có mong ước gì trong ngày kỉ niệm này năm sau (Điều này sẽ bị ẩn đi và sẽ thông báo lại trước 3 ngày vào năm sau)"
             className="border border-pink-500 rounded-lg p-2 outline-pink-800 text-pink-600 text-xs"
           />

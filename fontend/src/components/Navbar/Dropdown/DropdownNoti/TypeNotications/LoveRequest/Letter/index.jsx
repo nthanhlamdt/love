@@ -108,7 +108,7 @@ export default function Letter({ notification }) {
 
                 <button
                   className='px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600'
-                  onClick={() => onSetLove('accept', notification.senderId, notification.loveDate, notification._id)}
+                  onClick={() => onSetLove('accept', notification.senderId._id, notification.loveDate, notification._id)}
                 >
                   Chấp nhận
                 </button>

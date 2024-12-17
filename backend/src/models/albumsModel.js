@@ -1,16 +1,10 @@
 const mongoose = require('mongoose')
-const user = require('./userModel')
+const couple = require('./CoupleModel')
 
 const albumsSchema = new mongoose.Schema({
-  userId: {
+  coupleId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: user,
-    required: true
-  },
-
-  userLoveId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: user,
+    ref: couple,
     required: true
   },
 

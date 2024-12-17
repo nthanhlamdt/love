@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Challenge from '../Challenge'
-import Request from './modal'
+import Request from './Request'
 
 export default function RequestChallenge() {
   const [challengeRequest, setChallengeRequest] = useState()

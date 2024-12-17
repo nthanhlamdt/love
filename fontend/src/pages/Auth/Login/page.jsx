@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import toast from 'react-hot-toast'
 import { loginUser } from '../../../api/api'
 import { useAuthContext } from '../../../context/authContext'
+import { toast } from 'react-toastify'
 
 function Page() {
   const { setAuthUser } = useAuthContext()

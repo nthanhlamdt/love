@@ -1,15 +1,29 @@
 import { useRef, useState } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'react-toastify'
 import Webcam from 'react-webcam'
 import { IoMdCamera } from 'react-icons/io'
 import { FiArrowUpRight } from 'react-icons/fi'
 import { FaCameraRetro } from 'react-icons/fa' // Icon để chuyển camera
+import { uploadPost } from '~/api/api'
 
 function Camera({ pictures, setPictures }) {
   const webcamRef = useRef(null)
   const [url, setUrl] = useState(null)
   const parentRef = useRef(null)
   const [facingMode, setFacingMode] = useState('environment') // Bắt đầu với camera sau
+  const userLove = JSON.parse(localStorage.getItem('userLove'))
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const base64ToBlob = (base64) => {
+    const byteString = atob(base64.split(',')[1])
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    return new Blob([ab], { type: mimeString })
+  }
 
   const [data, setData] = useState({
     id: pictures.length + 1,
@@ -28,18 +42,26 @@ function Camera({ pictures, setPictures }) {
     if (!url) {
       const imageSrc = webcamRef.current.getScreenshot()
       setUrl(imageSrc)
-      setData({ ...data, src: imageSrc })
+      setData({ ...data, src: base64ToBlob(imageSrc) })
     }
     else {
-      setPictures([...pictures, data])
       setUrl(null)
-      toast.success('Đăng ảnh thành công')
       setData({
         id: pictures.length + 1,
         src: '',
         user: 'Ngô Thành Lâm',
         title: ''
       })
+
+      uploadPost({
+        file: data.src,
+        userLove: userLove._id,
+        status: data.title
+      })
+        .then((data) => {
+          setPictures([{ ...data, userPostId: { avatar: user.avatar, fullName: user.fullName, _id: user._id } }, ...pictures])
+          toast.success('Đăng ảnh thành công')
+        })
     }
   }
 

@@ -42,6 +42,10 @@ body::-webkit-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
 }
 
+#merlin-chat {
+  display: none;
+}
+
 .mdl-js {
   height: 0;
 }
@@ -53,3 +57,4 @@ img {
 .container {
   width: 85%;
 }
+

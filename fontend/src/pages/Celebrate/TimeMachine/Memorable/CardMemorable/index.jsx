@@ -1,6 +1,6 @@
-import { Heart } from 'lucide-react'
 import { motion, useAnimation } from 'framer-motion'
 import { useEffect } from 'react'
+import Card from './Card'
 
 export default function CardMemorable({ statusTime, setStatusTime }) {
   const controls = useAnimation()
@@ -34,18 +34,11 @@ export default function CardMemorable({ statusTime, setStatusTime }) {
           times: [0, 0.5, 1]
         }}
       >
-        <Heart size={80} />
-        <p className="text-2xl md:text-4xl font-semibold">05 tháng 03 năm 2021</p>
-        <h1 className="text-6xl md:text-8xl font-lovelight my-3">Ngày bắt đầu hẹn hò</h1>
-        <img
-          src="assets/imgtest.jpg"
-          alt=""
-          className="w-52 h-52 md:w-80 md:h-80 object-cover object-center rounded-lg mb-2"
-        />
-        <p className="text-xl md:text-2xl font-semibold">Bắt đầu hẹn hò cùng nhau</p>
+
+        <Card />
 
         <button
-          className="py-3 mt-5  px-4 bg-pink-500 w-1/2 rounded-3xl font-bold"
+          className="py-3 mt-5  px-4 bg-pink-500 w-1/2 max-w-96 rounded-3xl font-bold"
           onClick={() => setStatusTime(!statusTime)} >
           Trở về hiện tại
         </button>

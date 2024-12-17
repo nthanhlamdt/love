@@ -4,7 +4,7 @@ import Dropdown from './Dropdown'
 
 function index({ user }) {
   return (
-    <div className="flex items-center justify-between bg-pink-600 text-white">
+    <div className="flex top-0 left-0 right-0 shadow-md z-10 items-center justify-between bg-pink-600 text-white">
       <NavbarScreenSmall />
       <NavbarScreenBig />
 

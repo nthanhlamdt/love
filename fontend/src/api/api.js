@@ -126,3 +126,95 @@ export const deleteImageAlbums = async ({ imageId }) => {
   })
   return response.data
 }
+
+export const getCelebrate = async (userLoveId) => {
+  const response = await axiosInstance.get('/celebrate', {
+    params: { userLoveId }
+  })
+  return response.data
+}
+
+export const patchCelebrateImages = async ({ type, file, text, userLoveId }) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('type', type)
+  formData.append('text', text)
+  formData.append('userLoveId', userLoveId)
+
+  const response = await axiosInstance.patch('/celebrate', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+
+export const getPost = async ({ userLoveId }) => {
+  const response = await axiosInstance.get('/post', {
+    params: { userLoveId }
+  })
+  return response.data
+}
+
+export const uploadPost = async ({ file, userLove, status }) => {
+  const response = await axiosInstance.post('/post', { file, userLove, status }, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+
+export const getMemoryType = async ({ userLoveId }) => {
+  const response = await axiosInstance.get('/memory/type', {
+    params: { userLoveId }
+  })
+  return response.data
+}
+
+export const createMemory = async (data, userLoveId) => {
+  const formData = new FormData()
+  formData.append('date', data.date)
+  formData.append('name', data.name)
+  formData.append('userLoveId', userLoveId)
+  formData.append('description', data.description)
+  formData.append('memoryType', data.memoryType)
+  formData.append('image', data.image)
+
+  const response = await axiosInstance.post('/memory', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+
+export const getMemory = async ({ userLoveId, month, year }) => {
+  const response = await axiosInstance.get('/memory', {
+    params: { userLoveId, month, year }
+  })
+  return response.data
+}
+
+export const createYearlyMemory = async ({ data, memoryId }) => {
+  const formData = new FormData()
+  formData.append('year', data.year)
+  formData.append('name', data.name)
+  formData.append('memoryId', memoryId)
+  formData.append('description', data.description)
+  formData.append('image', data.image)
+
+  const response = await axiosInstance.post('/memory/yearly', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+
+export const getYearlyMemory = async ({ memoryId }) => {
+  const response = await axiosInstance.get('/memory/yearly', {
+    params: { memoryId }
+  })
+  return response.data
+}

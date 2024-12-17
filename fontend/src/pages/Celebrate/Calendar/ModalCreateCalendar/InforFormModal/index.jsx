@@ -1,11 +1,27 @@
 import { CalendarRange, ClipboardType, Heart } from 'lucide-react'
 import Emoji from '../../../../../components/Emoji'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getMemoryType } from '../../../../../api/api'
 
 export default function InforFormModal({ data, setData }) {
   const [typeCelebrate, setTypeCelebrate] = useState('🌟 kỷ niệm đặc biệt')
   const [iconSelect, setIconSelect] = useState(false)
   const [iconTypeCelebrate, setIconTypeCelebrate] = useState('')
+  const [memoryTypes, setMemoryTypes] = useState([])
+  const userLoveId = JSON.parse(localStorage.getItem('userLove'))._id
+
+  useEffect(() => {
+    getMemoryType({ userLoveId: userLoveId })
+      .then((data) => {
+        setMemoryTypes(data)
+      })
+
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error('getpost error: ', e)
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div>
@@ -45,13 +61,19 @@ export default function InforFormModal({ data, setData }) {
           className="border border-pink-500 rounded-lg p-2 outline-pink-800 text-pink-600 font-semibold"
           value={typeCelebrate}
           onChange={e => {
-            setData({ ...data, type: e.target.value })
+            setData({ ...data, memoryType: e.target.value })
             setTypeCelebrate(e.target.value)
           }}
         >
-          <option value={'🌟 kỷ niệm đặc biệt'}>🌟Ngày kỷ niệm đặc biệt</option>
-          <option value={'💕 Ngày hẹn hò'}>💕Ngày hẹn hò</option>
-          <option value={'🗓️ Ngày lễ hằng năm'}>🗓️Ngày lễ hằng năm</option>
+          {
+            memoryTypes.map((memoryType) => {
+              return (
+                <option key={memoryType._id} value={memoryType._id}>
+                  {memoryType.icon + ' ' + memoryType.name}
+                </option>
+              )
+            })
+          }
           <option value={''}>❓Khác</option>
         </select>
       </div>

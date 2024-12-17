@@ -20,18 +20,13 @@ const getReceiverSocketId = (receiverId) => {
 };
 
 io.on("connection", (socket) => {
-  console.log("Đã có người dùng kết nối: ", socket.id);
-
   // Đăng ký người dùng khi họ kết nối
   socket.on("register", (userId) => {
     userSocketMap[userId] = socket.id;
     console.log("Đã đăng ký người dùng: ", userId, "với socket ID:", socket.id);
   });
 
-  // Lắng nghe sự kiện "disconnect" để xóa người dùng khỏi userSocketMap
   socket.on("disconnect", () => {
-    console.log("Người dùng đã ngắt kết nối: ", socket.id);
-    // Tìm userId từ socketId và xóa khỏi userSocketMap
     for (let userId in userSocketMap) {
       if (userSocketMap[userId] === socket.id) {
         delete userSocketMap[userId];

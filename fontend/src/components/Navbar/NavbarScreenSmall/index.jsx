@@ -21,7 +21,7 @@ export default function NavbarScreenSmall() {
         </div>
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content focus:text-white bg-pink-400 rounded-box z-20 mt-3 w-52 p-2 shadow">
+          className="menu menu-sm dropdown-content focus:text-white bg-pink-400 rounded-box mt-3 w-52 p-2 shadow">
           <li className="text-white"><Link to='/'>Trang Chủ</Link></li>
           <li className="text-white"><Link to='/album'>Album Ảnh</Link></li>
           <li className="text-white"><Link to='celebrate'>Kỷ Niệm</Link></li>

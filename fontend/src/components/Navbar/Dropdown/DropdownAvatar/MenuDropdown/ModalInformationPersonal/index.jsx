@@ -7,9 +7,9 @@ import ChangeInformationUser from './ChangeInformationUser'
 export default function ModalInformationPersonal({ setIsOpenInformationPerional }) {
   const [isEditing, setIsEditing] = useState(false)
   return (
-    <div className="z-[9999] fixed inset-0 flex flex-col justify-center items-center bg-[rgba(0,0,0,0.4)]">
+    <div className="fixed z-[10000] inset-0 flex flex-col justify-center items-center bg-[rgba(0,0,0,0.4)]">
       <motion.div
-        className="min-w-96 bg-white text-pink-600 rounded-lg overflow-hidden relative max-w-xl"
+        className="min-w-96 bg-white text-pink-600 rounded-lg overflow-hidden relative max-w-xl z-[10000]"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}

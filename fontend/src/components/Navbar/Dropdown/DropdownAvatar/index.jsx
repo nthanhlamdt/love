@@ -10,7 +10,7 @@ export default function DropdownAvatar({
   return (
     <div ref={avatarDropdownRef} className='relative'>
       <div
-        className="btn btn-ghost btn-circle avatar"
+        className="btn btn-ghost btn-circle avatar "
         onClick={() => {
           setIsAvatarDropdownOpen(!isAvatarDropdownOpen)
           setIsNotificationDropdownOpen(false)

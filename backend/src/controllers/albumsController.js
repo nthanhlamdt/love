@@ -12,13 +12,19 @@ const getAlbums = async (req, res) => {
     if (!userId && !userLoveId) {
       return res.status(400).json({ error: "Cần cung cấp userId hoặc userLoveId" })
     }
+
+    const existingCouple = await couple.findOne({
+        $or: [
+          { userId: userId, userLoveId: userLoveId },
+          { userId: userLoveId, userLoveId: userId }
+        ]
+    })
     
-    const albums = await Albums.find({
-      $or: [
-        { userId: userId, userLoveId: userLoveId },
-        { userId: userLoveId, userLoveId: userId }
-      ]
-    }).sort({ createdAt: -1 })
+    if (!existingCouple) {
+      return res.status(404).json({ error: "Không tìm thấy couple" });
+    }
+    
+    const albums = await Albums.find({coupleId: existingCouple.id}).sort({ createdAt: -1 })
 
     if (albums.length === 0) {
       return res.status(404).json({ error: "Chưa có album nào" })
@@ -73,11 +79,10 @@ const createAlbums = async (req, res) => {
 
     const coverImage = '/assets/send_letter.png'
     const albums = new Albums({
-      userId,
+      coupleId: userStatusPending.id,
       coverImage,
       name,
       description,
-      userLoveId: userLove._id
     })
     
     await albums.save()

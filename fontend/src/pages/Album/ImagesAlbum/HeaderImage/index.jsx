@@ -4,8 +4,8 @@ import UploadFile from './UploadFile'
 
 export default function HeaderImage({ album, setFileImages }) {
   return (
-    <div className=''>
-      <Link className='flex text-pink-400' to='/album'>
+    <div>
+      <Link className='inline-flex text-pink-400' to='/album'>
         <ChevronLeft />
         <span>Quay lại Album</span>
       </Link>
