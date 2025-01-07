@@ -1,7 +1,7 @@
 // axiosInstance.js
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000/api'
+const API_URL = 'https://love-0vtk.onrender.com/api'
 
 const instance = axios.create({
   baseURL: API_URL
