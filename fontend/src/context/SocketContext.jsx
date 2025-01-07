@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useAuthContext } from './AuthContext'
+import { useAuthContext } from './AuthContext.js'
 import io from 'socket.io-client'
 
 const SocketContext = createContext()
