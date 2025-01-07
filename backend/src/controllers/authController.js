@@ -1,6 +1,6 @@
 const User = require('../models/userModel')
 const Couple = require('../models/coupleModel')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const moment = require('moment-timezone')
 
