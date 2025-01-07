@@ -24,8 +24,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
 }))
 
-
-
 app.use(bodyParser.json())
 app.use(cookieParser())
 
@@ -39,10 +37,12 @@ app.use('/api/memory', memoryRoutes)
 app.use('/api/cook', cookRoutes)
 app.use('/api/message', messageRoutes)
 
-connectDB().then(() => {
-  server.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on http://localhost:${process.env.PORT}`)
+connectDB()
+  .then(() => {
+    server.listen(process.env.PORT || 3000, () => {
+      console.log(`Server is running on http://localhost:${process.env.PORT || 3000}`);
+    });
   })
-}).catch(error => {
-  console.error('Server error:', error)
-})
+  .catch(error => {
+    console.error('Server error:', error);
+  });
