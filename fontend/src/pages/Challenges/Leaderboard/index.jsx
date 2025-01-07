@@ -1,7 +1,7 @@
 import { Crown, Trophy } from 'lucide-react'
 export default function Leaderboard() {
   const user = JSON.parse(localStorage.getItem('user'))
-  const userLove  = JSON.parse(localStorage.getItem('userLove'))
+  const userLove = JSON.parse(localStorage.getItem('userLove'))
   return (
     <div className='flex-1 mr-0 lg:mr-5 xl:mr-10'>
       <div className='flex justify-start items-center'>
@@ -16,7 +16,7 @@ export default function Leaderboard() {
           <img
             src={user?.avatar}
             alt='Tên người'
-            className='w-32 h-32 rounded-full border-2 border-pink-500'
+            className='w-32 h-32 rounded-full border-2 border-pink-500 object-cover object-center'
           />
 
           <h3 className='text-pink-600 font-semibold my-3'>{user?.fullName}</h3>
@@ -28,7 +28,7 @@ export default function Leaderboard() {
           <img
             src={userLove?.avatar}
             alt='Tên người'
-            className='w-32 h-32 rounded-full border-2 border-pink-500'
+            className='w-32 h-32 rounded-full border-2 border-pink-500 object-cover object-center'
           />
 
           <h3 className='text-pink-600 font-semibold my-3'>{ userLove?.fullName }</h3>

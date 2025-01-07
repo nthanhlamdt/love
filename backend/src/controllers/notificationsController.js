@@ -1,15 +1,17 @@
-const Notification = require("../models/NotificationsModel")
+const Notification = require("../models/notificationsModel")
 const User = require('../models/userModel')
 const mongoose = require('mongoose')
 const { getReceiverSocketId, io } = require("../socket/socket")
 
 const sendNotification = async (req, res) => {
+  
   try {
     let senderId = req.user._id;
     if (typeof senderId === 'string') {
       senderId =  new mongoose.Types.ObjectId(senderId);
     }
-    const { phoneNumber, message, type, title, loveDate } = req.body;
+
+    const { phoneNumber, message, type, title, loveDate, albumId } = req.body;
 
     const receiver = await User.findOne({ phoneNumber }).select('_id');
     if (!receiver) return res.status(400).json({ error: 'Số điện thoại không hợp lệ!' });
@@ -26,10 +28,11 @@ const sendNotification = async (req, res) => {
     const newNotification = new Notification({
       senderId,
       receiverId,
-      message,
-      type,
-      title,
-      loveDate,
+      message: message,
+      type: type,
+      title: title,
+      loveDate: loveDate,
+      albumId: albumId
     });
 
     const noticationSave = await newNotification.save()
@@ -38,6 +41,7 @@ const sendNotification = async (req, res) => {
     
     const newNotificationFull = {
       ...noticationSave.toObject(),
+      albumId: albumId,
       senderId: {
         _id: senderInfo._id,
         avatar: senderInfo.avatar,
@@ -81,8 +85,6 @@ const getNotification = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-module.exports = { sendNotification, getNotification };
 
 const readingSend = async (req, res) => {
   try {

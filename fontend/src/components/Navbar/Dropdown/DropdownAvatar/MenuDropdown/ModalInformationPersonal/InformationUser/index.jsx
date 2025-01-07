@@ -15,11 +15,11 @@ export default function InformationUser() {
       transition={{ duration: 0.3 }}
       className='grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-10 p-5 relative mt-3'
     >
-      <InforUser Icon={User} lable={'Họ và tên'} value={authUser.fullName}/>
-      <InforUser Icon={Sparkles} lable={'Giới tính'} value={authUser.gender}/>
-      <InforUser Icon={Calendar} lable={'Ngày sinh'} value={formatDate(authUser.dateBirth)}/>
-      <InforUser Icon={Phone} lable={'Số điện thoại'} value={authUser.phoneNumber}/>
-      <InforUser Icon={Heart} lable={'Tình trạng'} value={authUser.status == 'pending' ? 'Đang yêu' : 'Độc thân' }/>
+      <InforUser Icon={User} label={'Họ và tên'} title={authUser.fullName}/>
+      <InforUser Icon={Sparkles} label={'Giới tính'} title={authUser.gender}/>
+      <InforUser Icon={Calendar} label={'Ngày sinh'} title={formatDate(authUser.dateBirth)}/>
+      <InforUser Icon={Phone} label={'Số điện thoại'} title={authUser.phoneNumber}/>
+      <InforUser Icon={Heart} label={'Tình trạng'} title={authUser.status == 'pending' ? 'Đang yêu' : 'Độc thân' }/>
     </motion.div>
   )
 }

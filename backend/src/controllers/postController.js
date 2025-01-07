@@ -1,25 +1,23 @@
-const Couple = require("../models/CoupleModel");
+const Couple = require("../models/coupleModel");
 const Post = require("../models/postModel");
-const User = require("../models/userModel");
-const { post } = require("../routes/celebrateRoutes");
 
 const uploadPost = async (req, res) => {
   try {
-    const { userLove, status } = req.body
+    const { status } = req.body
     const userId = req.user._id
     const image = req.file?.path; 
 
-    const existingCouple = await Couple.findOne({
+    let userStatusPending = await Couple.findOne({
       $or: [
-        { userId: userId, userLoveId: userLove },
-        { userId: userLove, userLoveId: userId }
+        { userId: userId },
+        { userLoveId: userId }
       ]
     });
-
-    if (!existingCouple) return res.status(401).json({ message: 'bạn chưa kết nối đến ai' })
+    
+    if (!userStatusPending) return res.status(404).json({error: 'Người dùng chưa kết nối!'})
     
     const post = new Post({
-      coupleId: existingCouple._id,
+      coupleId: userStatusPending._id,
       userPostId: userId,
       status: status,
       image: image
@@ -37,22 +35,20 @@ const uploadPost = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const { userLoveId } = req.query;
     const userId = req.user._id;
 
     // Tìm cặp đôi
-    const existingCouple = await Couple.findOne({
+    let userStatusPending = await Couple.findOne({
       $or: [
-        { userId: userId, userLoveId: userLoveId },
-        { userId: userLoveId, userLoveId: userId },
-      ],
+        { userId: userId },
+        { userLoveId: userId }
+      ]
     });
-
-    if (!existingCouple)
-      return res.status(401).json({ message: 'Bạn chưa kết nối đến ai' });
+    
+    if (!userStatusPending) return res.status(404).json({error: 'Người dùng chưa kết nối!'})
 
     // Lấy bài viết kèm thông tin người dùng
-    const posts = await Post.find({ coupleId: existingCouple._id })
+    const posts = await Post.find({ coupleId: userStatusPending._id })
       .populate('userPostId', 'fullName avatar')  // Thay đổi dựa trên schema User
       .sort({ createdAt: -1 }); // Sắp xếp giảm dần theo ngày tạo
 

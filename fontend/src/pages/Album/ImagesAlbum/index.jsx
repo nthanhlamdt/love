@@ -14,6 +14,7 @@ export default function ImagesAlbum() {
 
   const [fileImages, setFileImages] = useState([])
   const [selectedAddImages, setSelectedAddImages] = useState([])
+  const [loadingStates, setLoadingStates] = useState([])
 
   useEffect(() => {
     if (albums.length === 0) {
@@ -32,18 +33,21 @@ export default function ImagesAlbum() {
       <HeaderImage
         album={album}
         setFileImages={setFileImages}
+        setLoadingStates={setLoadingStates}
       />
 
       <div className='mt-5'>
         {album.images.length > 0 || fileImages.length > 0 ? (
           <div>
-            {selectedAddImages.length != 0 &&
+            {fileImages.length != 0 &&
               <NavAddImages
                 selectedAddImages={selectedAddImages}
                 setSelectedAddImages={setSelectedAddImages}
                 fileImages={fileImages}
                 albumId={id}
+                album={album}
                 setFileImages={setFileImages}
+                setLoadingStates={setLoadingStates}
               />
             }
 
@@ -54,9 +58,9 @@ export default function ImagesAlbum() {
                   index={index}
                   image={image}
                   setFileImages={setFileImages}
-                  albumId={id}
                   setSelectedAddImages={setSelectedAddImages}
                   selectedAddImages={selectedAddImages}
+                  isLoading={loadingStates[index]}
                 />
               ))}
             </div>
@@ -65,7 +69,12 @@ export default function ImagesAlbum() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {album.images.map((image, index) => (
-                <CardImage key={image._id} image={image} album={album} index={index} />
+                <CardImage
+                  key={image._id}
+                  image={image}
+                  album={album}
+                  index={index}
+                />
               ))}
             </div>
           </div>

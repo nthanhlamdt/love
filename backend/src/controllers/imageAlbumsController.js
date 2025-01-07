@@ -1,50 +1,37 @@
 const imageAlbum = require("../models/imageAlbumModel")
 
 const addImagesAlbum = async (req, res) => {
-  let { data } = req.body  // Dữ liệu album từ body
-  const imageUrl = req.files  // Các ảnh tải lên từ req.files
-
-  data = JSON.parse(data)
-  // Kiểm tra dữ liệu đầu vào
-  if (!data || data.length === 0) {
-    return res.status(400).json({ error: "Dữ liệu album không hợp lệ!" })
-  }
-
-  if (!imageUrl || imageUrl.length === 0) {
-    return res.status(400).json({ error: "Không có tệp ảnh nào được tải lên!" })
-  }
-
   try {
-    let arrayImageCreate = []
-    for (let index = 0; index < data.length; index ++ ) {
-      const dt = data[index]
-      const image = imageUrl[index]
-      
-      if (!dt.albumId || !dt.name || !dt.location || !dt.time) {
-        return res.status(400).json({ error: `Album ${index + 1} thiếu thông tin bắt buộc!` })
-      }
-
-      const imagesAlbum = new imageAlbum({
-        albumId: dt.albumId,
-        name: dt.name,
-        time: dt.time,
-        location: dt.location,
-        src: image.path, // Đảm bảo src là đường dẫn hình ảnh, nếu dùng Cloudinary sẽ có URL
-      })
-
-      // Lưu đối tượng vào cơ sở dữ liệu
-      const images = await imagesAlbum.save()
-      arrayImageCreate.push(images)
+    let { albumId, name, time, location } = req.body; // Dữ liệu album từ body
+     console.log(req.file)
+    const imageUrl = req.file?.path; // Các ảnh tải lên từ req.files
+   
+    if (!albumId || !name || !location || !time) {
+      return res.status(400).json({ error: "Album thiếu thông tin bắt buộc!" })
     }
 
-    // Trả về phản hồi thành công
-    return res.status(201).json({ arrayImageCreate })
+    if (!imageUrl) {
+      return res.status(400).json({ error: "Không có tệp ảnh được tải lên!" });
+    }
 
+    const imagesAlbum = new imageAlbum({
+      albumId,
+      name,
+      time,
+      location,
+      src: imageUrl,
+    })
+
+    const SavedImageAlbum = await imagesAlbum.save()
+
+      // Trả về phản hồi thành công
+    return res.status(201).json(SavedImageAlbum)
   } catch (error) {
-    console.error("Error in addImagesAlbum controller:", error.message)
-    return res.status(500).json({ error: "Internal Server Error" })
+    console.error("Error in addImagesAlbum controller:", error.message);
+    return res.status(500).json({ error: error.message || "Internal Server Error", details: error.stack });
   }
 }
+
 
 const deleteImagesAlbum = async (req, res) => {
   const { imageId } = req.body
@@ -55,7 +42,6 @@ const deleteImagesAlbum = async (req, res) => {
 
   try {
     const deletedImageAlbum = await imageAlbum.findByIdAndDelete(imageId)
-
     if (!deletedImageAlbum) {
       return res.status(404).json({ error: "Image xóa không thành công!" })
     }
@@ -67,4 +53,28 @@ const deleteImagesAlbum = async (req, res) => {
   }
 }
 
-module.exports = { addImagesAlbum, deleteImagesAlbum }
+const updateImageAlbum = async (req, res) => {
+  try {
+    const { name, location, time, imageId } = req.body
+    if (!name || !location || !imageId || !time) {
+      return res.status(400).json({ error: 'Tài nguyên yêu cầu không tồn tại' })
+    }
+
+    const updatedImageAlbum = await imageAlbum.findByIdAndUpdate(
+      imageId,
+      { name, location, time },
+      { new: true, runValidators: true }
+    )
+
+    if (!updatedImageAlbum) {
+      return res.status(404).json({ error: 'Cập nhật không thành công' })
+    }
+
+    res.status(200).json(updatedImageAlbum)
+  } catch (error) {
+    console.error("Error in updateImageAlbum controller:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = { addImagesAlbum, deleteImagesAlbum, updateImageAlbum }

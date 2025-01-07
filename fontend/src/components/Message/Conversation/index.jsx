@@ -2,8 +2,13 @@ import { motion } from 'framer-motion'
 import InforMessage from './InforMessage'
 import InputMessage from './InputMessage'
 import ChatBubble from './ChatBubble'
+import { useMessageContext } from '~/context/messageContext'
+import { useAuthContext } from '~/context/authContext'
 
-export default function Conversation({ messageRef, type }) {
+export default function Conversation({ messageRef }) {
+  const { messages } = useMessageContext()
+  const { authUser } = useAuthContext()
+
   return (
     <motion.div
       initial={{ x: '100%', opacity: 0 }}
@@ -18,10 +23,15 @@ export default function Conversation({ messageRef, type }) {
     >
       <InforMessage />
       <div className='flex-1 flex flex-col-reverse my-2 overflow-auto'>
-        <ChatBubble message={'ehllo'} type={'send'} />
-        <ChatBubble message={'ehllo'} type={'resiver'} />
-        <ChatBubble message={'ehllo'} type={'send'} />
-        <ChatBubble message={'ehllo'} type={'send'} />
+        {messages.map(message => {
+          return (
+            <ChatBubble
+              key={message._id} // Đảm bảo mỗi phần tử có `key` duy nhất
+              message={message.message}
+              type={message.sendId === authUser._id ? 'send' : 'receiver'}
+            />
+          )
+        })}
       </div>
       <InputMessage />
     </motion.div>

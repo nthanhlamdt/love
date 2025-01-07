@@ -3,7 +3,7 @@ function HistoryPicture({ picture }) {
   return (
     <div className='h-full flex items-center justify-center'>
       <div className='flex max-w-[500px] w-[95%] justify-center items-center h-[90%] relative'>
-        <div className='h-full rounded-3xl border-4 border-pink-500 bg-slate-700 overflow-hidden relative'>
+        <div className='h-full w-[95%] rounded-3xl border-4 border-pink-500 bg-slate-700 overflow-hidden relative'>
           <img
             src={picture?.image}
             className='w-full h-full object-cover object-center'

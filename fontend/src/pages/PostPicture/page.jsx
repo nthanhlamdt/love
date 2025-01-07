@@ -6,10 +6,9 @@ import { getPost } from '~/api/api'
 
 function PostPicture() {
   const [pictures, setPictures] = useState([])
-  const userLove = JSON.parse(localStorage.getItem('userLove'))
 
   useEffect(() => {
-    getPost({ userLoveId: userLove._id })
+    getPost()
       .then((data) => {
         setPictures(data)
       })

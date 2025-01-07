@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getNotification } from '../api/api'
@@ -19,7 +19,6 @@ export const NotificationContextProvider = ({ children }) => {
   const { socket } = useSocketContext()
   const { authUser } = useAuthContext()
 
-  // Lấy thông báo khi component mount
   useEffect(() => {
     if (authUser) {
       getNotification()
@@ -31,7 +30,7 @@ export const NotificationContextProvider = ({ children }) => {
           console.error('Error fetching notifications:', error)
         })
     }
-  }, [])
+  }, [authUser])
 
   // Lắng nghe thông báo mới từ server qua socket
   useEffect(() => {
@@ -41,6 +40,7 @@ export const NotificationContextProvider = ({ children }) => {
       const sound = new Audio(notificationSound)
       sound.play()
       setNotifications((prevNotifications) => [notification, ...prevNotifications])
+      setQuanlityNotification((prev) => prev + 1)
     }
 
     socket.on('newNotification', handleNewNotification)

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const couple = require('./CoupleModel')
+const couple = require('./coupleModel')
 
 const memoryTypeSchema = new mongoose.Schema({
   icon: { type: String, require: true },

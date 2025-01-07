@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { readingNotification, sendNotification, setLove } from '../../../../../../../api/api'
-import { useNotificationContext } from '../../../../../../../context/notificationContext'
+import { readingNotification, sendNotification, setLove } from '../../../../../../api/api'
+import { useNotificationContext } from '../../../../../../context/notificationContext'
 
-export default function Letter({ notification }) {
+export default function LoveRequest({ notification }) {
   const [isOpen, setIsOpen] = useState(false)
   const timeSend = new Date(notification.createdAt)
   const { setNotifications } = useNotificationContext()

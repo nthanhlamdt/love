@@ -2,11 +2,19 @@ import { MapPin, Calendar, EllipsisVertical } from 'lucide-react'
 import DropDownMenu from './DropDownMenu'
 import { useEffect, useRef, useState } from 'react'
 
-export default function InforImage({ image, setImageCover, index }) {
+export default function InforImage({ image, setImageCover, index, setIsModalUpdate }) {
   const timeDate = new Date(image.time)
   const timeString = (timeDate.getDate() >= 10 ? timeDate.getDate() : '0' + timeDate.getDate()) +
     '-' + (timeDate.getMonth() + 1 >= 10 ? timeDate.getMonth() + 1 : '0' + (timeDate.getMonth() + 1)) +
     '-' + timeDate.getFullYear()
+
+  const isVideo = () => {
+    const videoExtensions = ['mp4', 'avi', 'mov', 'webm', 'mkv']
+    // Kiểm tra phần mở rộng từ image.src hoặc image.file.name nếu image.file tồn tại
+    const src = image.src || (image.file && image.file.name)
+    const ext = src ? src.split('.').pop().toLowerCase() : ''
+    return videoExtensions.includes(ext)
+  }
 
   const [visibleMenu, setVisibleMenu] = useState(false)
   const menuRef = useRef(null)
@@ -42,13 +50,27 @@ export default function InforImage({ image, setImageCover, index }) {
           >
             <EllipsisVertical size={16} />
           </div>
-          {visibleMenu && <DropDownMenu image={image} menuRef={menuRef} handleOpenImage={handleOpenImage} />}
+          {visibleMenu && <DropDownMenu
+            image={image}
+            menuRef={menuRef}
+            handleOpenImage={handleOpenImage}
+            setIsModalUpdate={setIsModalUpdate}
+          />}
         </div>
-        <img
-          src={image.src}
-          alt={image.name}
-          loading="lazy"
-          className='hero w-full h-64 object-cover object-center' />
+
+        {
+          isVideo(image.src) ?
+            (<video className='hero w-full h-64 object-cover object-center'>
+              <source src={image.src} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>) :
+            <img
+              src={image.src}
+              alt={image.name}
+              loading="lazy"
+              className='hero w-full h-64 object-cover object-center' />
+        }
+
         <div
           className='absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300'
           onClick={handleOpenImage}

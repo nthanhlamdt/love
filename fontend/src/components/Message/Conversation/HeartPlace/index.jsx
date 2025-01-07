@@ -16,7 +16,7 @@ export default function HeartPlace() {
             rotate: Math.random() * 360 // Xoay ngẫu nhiên
           }}
           transition={{
-            duration: 2,
+            duration: 8,
             repeat: Infinity,
             repeatType: 'loop',
             delay: i * 0.4 // Hiệu ứng delay để mỗi trái tim xuất hiện sau một khoảng thời gian

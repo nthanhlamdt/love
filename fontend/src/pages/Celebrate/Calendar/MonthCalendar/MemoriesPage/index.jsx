@@ -126,10 +126,24 @@ export default function EnhancedAnniversaryPage() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Ngày kỷ niệm sinh nhật của Ngô Thành Lâm
+            {anniversaryEvents.length > 0 && anniversaryEvents[0]?.name
+              ? anniversaryEvents[0]?.name
+              : 'Ngày kỉ niệm không xác định'}
           </motion.h1>
+
           <motion.p
-            className='text-2xl text-pink-700'
+            className='text-xl text-pink-600 mb-4'
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            {anniversaryEvents.length > 0 && anniversaryEvents[0]?.description
+              ? anniversaryEvents[0]?.description
+              : 'Ngày kỉ niệm không xác định'}
+          </motion.p>
+
+          <motion.p
+            className='text-2xl font-semibold text-pink-700'
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}

@@ -3,7 +3,7 @@ const router = express.Router()
 const { getAlbums, createAlbums, updateImageCover, deleteAlbum, updateAlbum } = require('../controllers/albumsController')
 const authenticateToken = require('../middleware/authMiddleware')
 const uploadCloud = require('../config/cloudinary.config')
-const { addImagesAlbum, deleteImagesAlbum } = require('../controllers/imageAlbumsController')
+const { addImagesAlbum, deleteImagesAlbum, updateImageAlbum } = require('../controllers/imageAlbumsController')
 
 router
   .get('/', authenticateToken, getAlbums)
@@ -11,7 +11,8 @@ router
   .patch('/', authenticateToken, uploadCloud.single('file'), updateImageCover)
   .delete('/', authenticateToken, deleteAlbum)
   .put('/', authenticateToken, updateAlbum)
-  .post('/image', authenticateToken, uploadCloud.array('files'), addImagesAlbum )
-  .delete('/image', authenticateToken, deleteImagesAlbum )
+  .post('/image', authenticateToken, uploadCloud.single('file'), addImagesAlbum )
+  .delete('/image', authenticateToken, deleteImagesAlbum)
+  .put('/image', updateImageAlbum )
 
 module.exports = router

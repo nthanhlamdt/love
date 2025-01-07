@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuthContext } from './AuthContext'
 import io from 'socket.io-client'
@@ -17,11 +18,9 @@ export const SocketContextProvider = ({ children }) => {
       const socketIo = io(SOCKET_URL)
 
       socketIo.on('connect', () => {
-        console.log('Kết nối WebSocket thành công', socketIo.id)
         setIsConnected(true)
         // Sau khi kết nối thành công, gửi yêu cầu đăng ký người dùng
         socketIo.emit('register', authUser._id)
-        console.log(`Đăng ký thành công với socket ID: ${socketIo.id}`)
       })
 
       // Lưu socket vào state

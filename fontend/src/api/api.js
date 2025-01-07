@@ -26,10 +26,25 @@ export const getCoupleUser = async () => {
   return response.data
 }
 
+export const updateUser = async ({ fullName, gender, phoneNumber, dateBirth }) => {
+  const response = await axiosInstance.put('/user', { fullName, gender, phoneNumber, dateBirth })
+  return response.data
+}
+
+export const updateAvatarUser = async ({ file }) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  const response = await axiosInstance.patch('/user', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data' // Đặt header cho multipart
+    }
+  })
+  return response.data
+}
 
 // Gửi thông báo
-export const sendNotification = async ({ phoneNumber, loveDate, message, title, type }) => {
-  const response = await axiosInstance.post('/notification/', { phoneNumber, type, message, title, loveDate })
+export const sendNotification = async ({ phoneNumber, loveDate, message, title, type, albumId }) => {
+  const response = await axiosInstance.post('/notification/', { phoneNumber, type, message, title, loveDate, albumId })
   return response.data
 }
 
@@ -52,10 +67,8 @@ export const createAlbums = async ({ name, description }) => {
 }
 
 // Lấy danh sách album
-export const getAlbums = async ({ userLoveId }) => {
-  const response = await axiosInstance.get('/albums/',
-    { params: { userLoveId } }
-  )
+export const getAlbums = async () => {
+  const response = await axiosInstance.get('/albums/')
   return response.data
 }
 
@@ -88,22 +101,15 @@ export const updateAlbums = async ({ albumId, name, description }) => {
 }
 
 // Thêm ảnh vào album
-export const addImageToAlbum = async ({ data, files }) => {
+export const addImageToAlbum = async ({ data, file }) => {
   const formData = new FormData()
 
-  // Kiểm tra và thêm các file vào formData
-  if (files && files.length > 0) {
-    // Nếu có file, thêm chúng vào formData
-    files.forEach(file => {
-      formData.append('files', file)
-    })
-  }
-
-  // Kiểm tra và thêm thông tin album (data) vào formData
-  if (data) {
-    // Dữ liệu có thể là một mảng chứa một đối tượng, vì vậy cần đảm bảo luôn gửi dưới dạng JSON
-    formData.append('data', JSON.stringify(data))
-  }
+  console.log(data)
+  formData.append('file', file)
+  formData.append('albumId', data.albumId)
+  formData.append('name', data.name)
+  formData.append('time', data.time)
+  formData.append('location', data.location)
 
   try {
     // Gửi POST request lên server với 'multipart/form-data'
@@ -127,19 +133,21 @@ export const deleteImageAlbums = async ({ imageId }) => {
   return response.data
 }
 
-export const getCelebrate = async (userLoveId) => {
-  const response = await axiosInstance.get('/celebrate', {
-    params: { userLoveId }
-  })
+export const updateImageAlbum = async ({ imageId, name, time, location }) => {
+  const response = await axiosInstance.put('/albums/image', { imageId, name, time, location })
   return response.data
 }
 
-export const patchCelebrateImages = async ({ type, file, text, userLoveId }) => {
+export const getCelebrate = async () => {
+  const response = await axiosInstance.get('/celebrate')
+  return response.data
+}
+
+export const patchCelebrateImages = async ({ type, file, text }) => {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('type', type)
   formData.append('text', text)
-  formData.append('userLoveId', userLoveId)
 
   const response = await axiosInstance.patch('/celebrate', formData, {
     headers: {
@@ -149,15 +157,13 @@ export const patchCelebrateImages = async ({ type, file, text, userLoveId }) => 
   return response.data
 }
 
-export const getPost = async ({ userLoveId }) => {
-  const response = await axiosInstance.get('/post', {
-    params: { userLoveId }
-  })
+export const getPost = async () => {
+  const response = await axiosInstance.get('/post')
   return response.data
 }
 
-export const uploadPost = async ({ file, userLove, status }) => {
-  const response = await axiosInstance.post('/post', { file, userLove, status }, {
+export const uploadPost = async ({ file, status }) => {
+  const response = await axiosInstance.post('/post', { file, status }, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -165,18 +171,24 @@ export const uploadPost = async ({ file, userLove, status }) => {
   return response.data
 }
 
-export const getMemoryType = async ({ userLoveId }) => {
-  const response = await axiosInstance.get('/memory/type', {
-    params: { userLoveId }
+export const getMemoryType = async () => {
+  const response = await axiosInstance.get('/memory/type')
+  return response.data
+}
+
+export const createMemoryType = async (dataType) => {
+  const response = await axiosInstance.post('/memory/type', {
+    name: dataType.name,
+    icon: dataType.icon
   })
   return response.data
 }
 
-export const createMemory = async (data, userLoveId) => {
+
+export const createMemory = async (data) => {
   const formData = new FormData()
   formData.append('date', data.date)
   formData.append('name', data.name)
-  formData.append('userLoveId', userLoveId)
   formData.append('description', data.description)
   formData.append('memoryType', data.memoryType)
   formData.append('image', data.image)
@@ -189,9 +201,9 @@ export const createMemory = async (data, userLoveId) => {
   return response.data
 }
 
-export const getMemory = async ({ userLoveId, month, year }) => {
+export const getMemory = async ({ month }) => {
   const response = await axiosInstance.get('/memory', {
-    params: { userLoveId, month, year }
+    params: { month }
   })
   return response.data
 }
@@ -216,5 +228,73 @@ export const getYearlyMemory = async ({ memoryId }) => {
   const response = await axiosInstance.get('/memory/yearly', {
     params: { memoryId }
   })
+  return response.data
+}
+
+export const getTimeMachine = async ({ userLoveId }) => {
+  const response = await axiosInstance.get('/memory/time-machine', {
+    params: { userLoveId }
+  })
+  return response.data
+}
+
+export const createCooking = async (data) => {
+  const formData = new FormData()
+
+  formData.append('title', data.title)
+  formData.append('name', data.name)
+  formData.append('description', data.description)
+  formData.append('peopleEating', data.peopleEating)
+  formData.append('image', data.image) // Assuming 'image' is a file input
+  formData.append('time', data.time)
+
+  // Chuyển đổi mảng ingredients và steps thành JSON
+  formData.append('ingredients', JSON.stringify(data.ingredients))
+  formData.append('recipes', JSON.stringify(data.steps))
+
+  const response = await axiosInstance.post('/cook', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+
+  return response.data
+}
+
+export const getCooking = async () => {
+  const response = await axiosInstance.get('/cook')
+  return response.data
+}
+
+export const getIngredient = async ({ cookId }) => {
+  const response = await axiosInstance.get('/cook/ingredient', {
+    params: { cookId }
+  })
+  return response.data
+}
+
+export const getStep = async ({ cookId }) => {
+  const response = await axiosInstance.get('/cook/step', {
+    params: { cookId }
+  })
+  return response.data
+}
+
+export const getMessage = async () => {
+  const response = await axiosInstance.get('/message')
+  return response.data
+}
+
+export const sendMessage = async (message) => {
+  const response = await axiosInstance.post('/message', {
+    message
+  })
+
+  return response.data
+}
+
+export const updateMessagesStatusToReaded = async () => {
+  const response = await axiosInstance.patch('/message')
+
   return response.data
 }

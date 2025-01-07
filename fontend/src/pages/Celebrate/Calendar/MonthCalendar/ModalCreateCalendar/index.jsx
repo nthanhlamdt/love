@@ -5,40 +5,49 @@ import PictureFormModal from './PictureFormModal'
 import { createMemory } from '~/api/api'
 import { toast } from 'react-toastify'
 
-export default function ModalCreateCalendar({ setStatusModal, statusModal }) {
+export default function ModalCreateCalendar({ setStatusModal, statusModal, setMemoryMonth }) {
   const [selectForm, setSelectForm] = useState('info')
-  const userLoveId = JSON.parse(localStorage.getItem('userLove'))._id
 
   const [data, setData] = useState({
     date: statusModal,
     name: '',
     description: '',
     memoryType: '',
-    image: '',
-    repeat: false,
-    dreaming: ''
+    image: ''
   })
 
   const handelSubmitCreate = () => {
-    if (!data.name || !data.description || !data.memoryType) {
+    if (!data.name || !data.description) {
       return toast.error('Vui lòng nhập đầy đủ thông tin')
     }
 
-    else if (!data.image ) {
-      return toast.error('Vui lòng thêm ảnh kỉ niệm')
+    else if (data.memoryType == '1') {
+      return toast.error('Vui lòng lựa chọn loại kỉ niệm')
     }
-    createMemory(data, userLoveId)
-      .then(() => {
-        toast.success('tạo kỉ niệm thành công')
+
+    // Kiểm tra nếu thiếu ảnh kỷ niệm
+    else if (!data.image) {
+      return toast.error('Vui lòng thêm ảnh kỷ niệm')
+    }
+
+    // Gọi API tạo kỷ niệm
+    createMemory(data)
+      .then(data => {
+        // Nếu tạo thành công, thông báo thành công
+        setStatusModal(false)
+        setMemoryMonth(prev => ([...prev, data]))
+        toast.success('Tạo kỷ niệm thành công')
       })
       .catch(() => {
-        toast.error('Lỗi kỉ thuật vui lòng thực hiện lại')
+        // Nếu có lỗi khi tạo, thông báo lỗi
+        toast.error('Lỗi kỹ thuật, vui lòng thực hiện lại')
       })
   }
 
+
   return (
-    <div className="fixed z-[999] inset-0 flex justify-center items-center">
-      <div className="relative w-[90%] max-w-[450px] max-h-[80%] p-5 mb-5 bg-white rounded-xl border-2 overflow-y-auto border-pink-500">
+    <div className="fixed z-[999] inset-0 flex justify-center items-center bg-[rgba(0,0,0,0.2)]">
+      <div className="relative w-[90%] max-w-[450px] max-h-[80%] p-5 mb-5 bg-white rounded-xl border-2 overflow-y-auto">
         <X className="absolute top-3 right-3 text-pink-600" onClick={() => setStatusModal(false)} />
         <h2 className="text-center font-bold text-3xl text-pink-600">Lưu Giữ Kỷ Niệm</h2>
         <p className="text-center font-semibold text-xl text-pink-500">{statusModal}</p>
@@ -60,12 +69,15 @@ export default function ModalCreateCalendar({ setStatusModal, statusModal }) {
         </div>
 
         {
-          selectForm == 'info'
-            ? <InforFormModal
+          selectForm == 'info'?
+            <InforFormModal
+              data={data}
+              setData={setData}
+            /> :
+            <PictureFormModal
               data={data}
               setData={setData}
             />
-            : <PictureFormModal data={data} setData={setData}/>
         }
 
         <div className="flex items-center mt-5 justify-end">

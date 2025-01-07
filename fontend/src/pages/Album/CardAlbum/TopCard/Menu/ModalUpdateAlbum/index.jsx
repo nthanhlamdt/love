@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'react-toastify'
 import { updateAlbums } from '../../../../../../api/api'
 import { useAlbumContext } from '../../../../../../context/albumContext'
 

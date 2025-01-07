@@ -1,30 +1,27 @@
 const Albums = require('../models/albumsModel')
-const couple = require('../models/CoupleModel')
+const couple = require('../models/coupleModel')
 const imageAlbum = require('../models/imageAlbumModel')
 const user = require('../models/userModel')
 const cloudinary = require('cloudinary').v2
 
 const getAlbums = async (req, res) => {
   try {
-    const { userLoveId } = req.query
     const userId = req.user._id
 
-    if (!userId && !userLoveId) {
-      return res.status(400).json({ error: "Cần cung cấp userId hoặc userLoveId" })
+    if (!userId) {
+      return res.status(400).json({ error: "Cần cung cấp userId" })
     }
 
-    const existingCouple = await couple.findOne({
-        $or: [
-          { userId: userId, userLoveId: userLoveId },
-          { userId: userLoveId, userLoveId: userId }
-        ]
-    })
+    const userStatusPending = await couple.findOne({
+      $or: [
+        { userId: userId },
+        { userLoveId: userId }
+      ]
+    });
     
-    if (!existingCouple) {
-      return res.status(404).json({ error: "Không tìm thấy couple" });
-    }
+    if (!userStatusPending) return res.status(404).json({error: 'Người dùng chưa kết nối!'})
     
-    const albums = await Albums.find({coupleId: existingCouple.id}).sort({ createdAt: -1 })
+    const albums = await Albums.find({coupleId: userStatusPending._id}).sort({ createdAt: -1 })
 
     if (albums.length === 0) {
       return res.status(404).json({ error: "Chưa có album nào" })
@@ -47,8 +44,8 @@ const getAlbums = async (req, res) => {
       albumImages
     })
   } catch (error) {
-    console.error("Error in getAlbums controller:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error in getAlbums controller:", error.message)
+    return res.status(500).json({ error: "Internal Server Error" })
   }
 }
 

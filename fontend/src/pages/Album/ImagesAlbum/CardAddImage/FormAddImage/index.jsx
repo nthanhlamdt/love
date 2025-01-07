@@ -1,55 +1,6 @@
 import { Calendar, MapPin, Captions } from 'lucide-react'
-import { addImageToAlbum } from '../../../../../api/api'
-import { toast } from 'react-toastify'
-import { useAlbumContext } from '../../../../../context/albumContext'
 
-export default function FormAddImage({ data, setData, formattedDate, albumId, setFileImages, index }) {
-  const { setAlbums } = useAlbumContext()
-
-  const handleSaveImage = () => {
-    if (!data.name || !data.location || !data.time) {
-      return toast.error('Vui lòng nhập đủ thông tin!')
-    }
-
-    const imageData = [{
-      name: data.name,
-      time: data.time,
-      location: data.location,
-      albumId
-    }]
-
-    const files = data.file ? [data.file] : []
-
-    addImageToAlbum({
-      data: imageData,
-      files: files
-    })
-      .then((dt) => {
-        setFileImages(prev => {
-          const newFileImages = prev.filter(image => image.file !== data.file) // Lọc phần tử cần xóa
-          return newFileImages
-        })
-
-        setAlbums(prev =>
-          prev.map(album => {
-            if (album._id === albumId) {
-              // Khi tìm thấy album, thêm ảnh mới vào `images`
-              return {
-                ...album,
-                images: [dt.arrayImageCreate[index], ...album.images]
-              }
-            }
-            return album // Không thay đổi album khác
-          })
-        )
-
-        toast.success('Thêm ảnh vào album thành công!')
-      })
-      .catch(() => {
-        toast.error('Đã có lỗi sảy ra vui lòng thử lại!')
-      })
-  }
-
+export default function FormAddImage({ data, setData, formattedDate }) {
   return (
     <div className='absolute bottom-0 p-3 bg-[rgba(255,255,255,0.5)] w-full text-pink-400 text-xs'>
       <div className='flex items-center'>
@@ -85,12 +36,6 @@ export default function FormAddImage({ data, setData, formattedDate, albumId, se
           />
         </p>
       </div>
-
-      <button
-        onClick={handleSaveImage}
-        className='w-full bg-pink-600 py-1 rounded-lg mt-1 text-white font-bold cursor-pointer hover:bg-pink-700'>
-        Lưu ảnh
-      </button>
     </div>
   )
 }

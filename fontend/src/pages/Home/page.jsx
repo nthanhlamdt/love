@@ -44,7 +44,7 @@ function Home() {
 
   return (
     <div>
-      {loveUser && authUser.status === 'pending' ? <Heart user={authUser} loveUser={loveUser} /> : <NotConnectedHomepage />}
+      {loveUser ? <Heart user={authUser} loveUser={loveUser} /> : <NotConnectedHomepage />}
     </div>
   )
 }

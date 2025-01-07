@@ -9,7 +9,7 @@ function DropdownNotification({
   setIsNotificationDropdownOpen,
   isNotificationDropdownOpen
 }) {
-  const { quanlityNotification, setQuanlityNotification, notifications } = useNotificationContext()
+  const { quanlityNotification, setQuanlityNotification, notifications, setNotifications } = useNotificationContext()
 
   const handleOpenNotification = async () => {
     setQuanlityNotification(0)
@@ -17,11 +17,19 @@ function DropdownNotification({
     setIsNotificationDropdownOpen(!isNotificationDropdownOpen)
     await Promise.all(
       notifications.map(notification =>
-        readingNotification({ idNotification: notification._id, status: 'see' })
+        readingNotification({ idNotification: notification._id, status: notification.status == 'unread' ? 'see' : notification.status })
+          .then(data => setNotifications(prevNotifications => {
+            return prevNotifications.map(n => {
+              if (n._id === data._id) {
+                return { ...n, status: data.status }
+              }
+              return n
+            })
+          }))
       )
     )
-
   }
+
   return (
     <>
       <div ref={notificationDropdownRef} className='relative z-[99]'>

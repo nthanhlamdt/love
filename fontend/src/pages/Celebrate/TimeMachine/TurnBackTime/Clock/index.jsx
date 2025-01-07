@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import timeReverseSound from '/sound/timeReverseSound.mp3'
 
 const Clock = ({ selectedCalendar, setSelectedCalendar, statusTime }) => {
   const [rotation, setRotation] = useState({ hour: 0, minute: 0, second: 0 })
@@ -13,17 +14,19 @@ const Clock = ({ selectedCalendar, setSelectedCalendar, statusTime }) => {
         second: statusTime ? prev.second + 360 * 6 * 60 * 60 :prev.second -360 * 6 * 60 * 60 // Quay ngược 2 vòng cho kim giây
       }))
     }
-  }, [selectedCalendar])
+  }, [selectedCalendar, statusTime])
 
   useEffect(() => {
     if (statusTime === true) {
+      const sound = new Audio(timeReverseSound)
+      sound.play()
       const timer = setTimeout(() => {
         setSelectedCalendar(statusTime)
       }, 7500)
 
       return () => clearTimeout(timer)
     }
-  })
+  }, [setSelectedCalendar, statusTime])
   return (
     <div className="relative w-64 h-64">
       <svg viewBox="0 0 100 100" className="w-full h-full">

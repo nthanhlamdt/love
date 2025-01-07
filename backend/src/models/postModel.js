@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const couple = require('./CoupleModel')
+const couple = require('./coupleModel')
 const user = require('./userModel')
 
 const postSchema = new mongoose.Schema({

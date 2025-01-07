@@ -1,11 +1,12 @@
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { createAlbums } from '../../../../api/api'
+import { createAlbums, sendNotification } from '../../../../api/api'
 import { useAlbumContext } from '../../../../context/albumContext'
 
 export default function ModalCreateAlbum({ setIsModal }) {
   const { albums, setAlbums } = useAlbumContext()
+  const userlove = JSON.parse(localStorage.getItem('userLove'))
 
   const [dataAlbum, setDataAlbum] = useState({
     name: '',
@@ -28,6 +29,10 @@ export default function ModalCreateAlbum({ setIsModal }) {
         toast.success('Tạo album thành công!')
         setDataAlbum(data)
         setIsModal(false)
+        sendNotification({ type: 'album', title: ' đã tạo album tên ' + data.name, phoneNumber: userlove.phoneNumber })
+          .catch(error => {
+            toast.error(error?.response?.data?.error)
+          })
       })
       .catch(error => {
         toast.error(error?.response?.data?.message)

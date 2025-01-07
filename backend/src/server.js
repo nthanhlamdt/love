@@ -12,6 +12,8 @@ const celebrateRoutes = require('./routes/celebrateRoutes')
 const albumsRoutes = require('./routes/albumsRoutes')
 const postRoutes = require('./routes/postRoutes')
 const memoryRoutes = require('./routes/memoryRoutes')
+const cookRoutes = require('./routes/cookRoutes')
+const messageRoutes = require('./routes/chatRoutes')
 
 const { app, server } = require("./socket/socket")
 
@@ -34,6 +36,8 @@ app.use('/api/albums', albumsRoutes)
 app.use('/api/celebrate', celebrateRoutes)
 app.use('/api/post', postRoutes)
 app.use('/api/memory', memoryRoutes)
+app.use('/api/cook', cookRoutes)
+app.use('/api/message', messageRoutes)
 
 connectDB().then(() => {
   server.listen(process.env.PORT, () => {

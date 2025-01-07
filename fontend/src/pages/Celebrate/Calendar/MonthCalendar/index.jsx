@@ -3,31 +3,28 @@ import { useEffect, useState } from 'react'
 import { getMemory } from '../../../../api/api'
 import { findDateInArray } from '~/utils/findDateInArray'
 import { useNavigate } from 'react-router-dom'
+import ModalCreateCalendar from './ModalCreateCalendar'
 
-export default function MonthCalendar({ setSelectedCalendar, setStatusModal }) {
+export default function MonthCalendar({ setSelectedCalendar }) {
   const navigate = useNavigate()
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
-  const userLoveId = JSON.parse(localStorage.getItem('userLove'))._id
   const [memoryMonth, setMemoryMonth] = useState([])
+  const [statusModal, setStatusModal] = useState(null)
 
   useEffect(() => {
-    if (!userLoveId) return
-
-    getMemory({ userLoveId, month, year })
+    getMemory({ month })
       .then(data => {
         setMemoryMonth(data)
         setStatusModal(false)
       })
       .catch(error => {
+        // eslint-disable-next-line no-console
         console.error('Lỗi khi lấy memory:', error)
       })
-  }, [userLoveId, month, year])
+  }, [month])
 
-  const getDaysInMonth = (month, year) => {
-    return new Date(year, month, 0).getDate()
-  }
-
+  const getDaysInMonth = (month, year) => new Date(year, month, 0).getDate()
   const getFirstDayOfMonth = (month, year) => {
     const day = new Date(year, month - 1, 1).getDay()
     return day === 0 ? 7 : day
@@ -36,18 +33,10 @@ export default function MonthCalendar({ setSelectedCalendar, setStatusModal }) {
   const generateCalendar = (month, year) => {
     const daysInMonth = getDaysInMonth(month, year)
     const firstDay = getFirstDayOfMonth(month, year) - 1
-    const calendar = []
+    const calendar = Array(7).fill(null)
 
-    for (let j = 0; j < 7; j++) {
-      if (j < firstDay && j < 6) {
-        calendar[j] = null
-      }
-    }
-    
-    let day = 1
     for (let i = firstDay; i < daysInMonth + firstDay; i++) {
-      calendar[i] = day
-      day++
+      calendar[i] = i - firstDay + 1
     }
 
     return calendar
@@ -73,22 +62,23 @@ export default function MonthCalendar({ setSelectedCalendar, setStatusModal }) {
 
   const isDateNow = (day) => {
     const dateNow = new Date()
-
     return (
-      dateNow.getDate().valueOf() === day &&
-      dateNow.getMonth().valueOf() + 1 === month &&
-      dateNow.getFullYear().valueOf() === year
+      dateNow.getDate() === day &&
+      dateNow.getMonth() + 1 === month &&
+      dateNow.getFullYear() === year
     )
   }
 
   const handelClickMemory = (day, month, year) => {
     if (!day) return // Kiểm tra xem day có hợp lệ không (không phải null hoặc undefined)
 
-    const foundMemory = findDateInArray(memoryMonth, new Date(year, month - 1, day))
+    const selectedDate = new Date(year, month - 1, day)
+    const foundMemory = findDateInArray(memoryMonth, selectedDate)
+
     if (foundMemory) {
       navigate(`/celebrate/${foundMemory._id}`)
     } else {
-      setStatusModal(`${day > 10 ? day : '0' + day}-${month > 10 ? month : '0' + month}-${year}`)
+      setStatusModal(`${day > 9 ? day : '0' + day}-${month > 9 ? month : '0' + month}-${year}`)
     }
   }
 
@@ -140,7 +130,13 @@ export default function MonthCalendar({ setSelectedCalendar, setStatusModal }) {
         <Clock className="mr-2 size-10" />
         Cổ máy thời gian
       </button>
+      {statusModal && <ModalCreateCalendar
+        statusModal={statusModal}
+        setStatusModal={setStatusModal}
+        setMemoryMonth={setMemoryMonth}
+      />}
     </div>
   )
 }
+
 

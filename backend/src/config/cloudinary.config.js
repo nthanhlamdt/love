@@ -13,14 +13,18 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  allowedFormats: ['jpg', 'png'],
+  allowedFormats: ['jpg', 'png', 'mp4', 'avi', 'mov', 'webm'],
   params: {
-    folder: 'love_image'
+    folder: 'love_image',
+    resource_type: 'auto'
   }
 })
 
 const uploadCloud = multer({
-  storage
+  storage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // Giới hạn kích thước tệp tin là 100MB
+  },
 })
 
 module.exports = uploadCloud;

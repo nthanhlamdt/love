@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-export default function InforUser({ Icon, lable, value }) {
+import Label from '~/components/Label'
+export default function InforUser({ Icon, label, title }) {
   return (
     <motion.div
       className='flex items-center px-4'
@@ -8,9 +9,9 @@ export default function InforUser({ Icon, lable, value }) {
       transition={{ duration: 0.5 }}
     >
       <span className='p-2 bg-pink-200 rounded-full mr-3'><Icon /></span>
-      <div className='flex flex-col items-start'>
-        <lable className='text-xs'>{lable}</lable>
-        <span className="text-md font-semibold">{ value }</span>
+      <div className='flex flex-col items-start justify-center'>
+        <Label title={label}/>
+        <span className="text-md font-semibold">{ title }</span>
       </div>
     </motion.div>
   )

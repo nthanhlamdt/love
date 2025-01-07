@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const couple = require('./CoupleModel')
+const couple = require('./coupleModel')
 
 const celebrateSchema = new mongoose.Schema({
   coupleId: {

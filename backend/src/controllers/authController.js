@@ -1,5 +1,5 @@
 const User = require('../models/userModel')
-const Couple = require('../models/CoupleModel')
+const Couple = require('../models/coupleModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const moment = require('moment-timezone')
@@ -70,7 +70,6 @@ const login = async (req, res) => {
     if (userStatusPending) status = 'pending'
 
     let userPending = user.toObject()
-    console.log(userPending)
 
     res.status(200).json({
       token,

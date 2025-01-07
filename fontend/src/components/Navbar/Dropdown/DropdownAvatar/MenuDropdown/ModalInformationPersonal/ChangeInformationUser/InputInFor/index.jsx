@@ -1,4 +1,4 @@
-export default function InputInfor({ Icon, lable, value }) {
+export default function InputInfor({ Icon, lable, value, onChange }) {
   return (
     <div className="flex flex-col">
       <span>{ lable }</span>
@@ -7,6 +7,7 @@ export default function InputInfor({ Icon, lable, value }) {
         <input
           type="text"
           value={value}
+          onChange={e => onChange(e.target.value)}
           className="ml-2 py-2 px-1 w-full outline-none rounded-lg"
         />
       </div>

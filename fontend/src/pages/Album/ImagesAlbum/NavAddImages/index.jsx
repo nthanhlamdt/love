@@ -2,12 +2,20 @@ import { motion } from 'framer-motion'
 import { SaveAll, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 import ModalInfolack from './ModalInfolack'
-import { addImageToAlbum } from '../../../../api/api'
+import { addImageToAlbum, sendNotification } from '../../../../api/api'
 import { toast } from 'react-toastify'
 import { useAlbumContext } from '../../../../context/albumContext'
 import { useParams } from 'react-router-dom'
 
-export default function NavAddImages({ selectedAddImages, setSelectedAddImages, fileImages, albumId, setFileImages }) {
+export default function NavAddImages({
+  selectedAddImages,
+  setSelectedAddImages,
+  fileImages,
+  album,
+  albumId,
+  setFileImages,
+  setLoadingStates
+}) {
   const { setAlbums } = useAlbumContext()
   const { id } = useParams()
   const [check, setCheck] = useState(false)
@@ -15,6 +23,7 @@ export default function NavAddImages({ selectedAddImages, setSelectedAddImages, 
     name: '',
     location: ''
   })
+  const userlove = JSON.parse(localStorage.getItem('userLove'))
 
   const handleCheckboxChange = (event) => {
     if (event.target.checked) {
@@ -26,13 +35,19 @@ export default function NavAddImages({ selectedAddImages, setSelectedAddImages, 
 
   const handleSaveImages = () => {
     const newArrayImages = selectedAddImages.map(select => fileImages[select])
-
-    // Kiểm tra xem có ảnh nào thiếu tên hoặc vị trí không
     const hasInvalidData = newArrayImages.some(data => !data.name || !data.location)
 
     if (hasInvalidData) {
       setCheck(true)
       return
+    }
+
+    saveImages(newArrayImages)
+  }
+
+  const saveImages = async (newArrayImages) => {
+    if (newArrayImages.length == 0) {
+      return toast.error('Vui lòng lựa chọn ảnh cần thêm')
     }
 
     const data = newArrayImages.map((dt) => ({
@@ -43,29 +58,57 @@ export default function NavAddImages({ selectedAddImages, setSelectedAddImages, 
     }))
 
     const files = newArrayImages.map(dt => dt.file)
+    selectedAddImages.map(select => {
+      setLoadingStates(prev => {
+        const updatedState = [...prev]
+        updatedState[select] = true
+        return updatedState
+      })
+    })
 
-    addImageToAlbum({ data, files })
-      .then((dt) => {
-        setFileImages(prev => prev.filter((_, index) => !selectedAddImages.includes(index)))
-        setSelectedAddImages([])
-
-        setAlbums(prev =>
-          prev.map(album => {
-            if (album._id === id) {
-              // Khi tìm thấy album, thêm ảnh mới vào `images`
-              return {
-                ...album,
-                images: [...dt.arrayImageCreate, ...album.images]
-              }
-            }
-            return album // Không thay đổi album khác
+    var count = 0
+    await Promise.all(
+      data.map(async (item, index) => {
+        await addImageToAlbum({ data: item, file: files[index] })
+          .then(dt => {
+            count++
+            setFileImages(prev => prev.filter((_, i) => !selectedAddImages.includes(i)))
+            setLoadingStates(prev => {
+              const updatedState = [...prev]
+              updatedState.splice(selectedAddImages[index], 1)
+              return updatedState
+            })
+            setAlbums(prev =>
+              prev.map(album => {
+                if (album._id === id) {
+                  return {
+                    ...album,
+                    images: [dt, ...album.images]
+                  }
+                }
+                return album
+              })
+            )
+            setSelectedAddImages([])
+            setLoadingStates([])
           })
-        )
-        toast.success('Thêm ảnh thành công!')
+          .catch(() => {
+            toast.error(`Đã có lỗi xảy ra với ảnh ${selectedAddImages[index]}.`)
+          })
       })
-      .catch(() => {
-        toast.error('Đã có lỗi xảy ra. Vui lòng thử lại!')
+    )
+
+    if (count != 0) {
+      // Gửi thông báo
+      await sendNotification({
+        type: 'add_image_album',
+        title: `đã thêm ${count} ảnh vào album ${album.name}`,
+        phoneNumber: userlove.phoneNumber,
+        albumId: albumId
       })
+
+      toast.success(`Thêm ${count} ảnh thành công!`)
+    }
   }
 
   return (
@@ -101,7 +144,10 @@ export default function NavAddImages({ selectedAddImages, setSelectedAddImages, 
         <X
           size={20}
           className='cursor-pointer'
-          onClick={() => setSelectedAddImages([])}
+          onClick={() => {
+            setSelectedAddImages([])
+            setFileImages([])
+          }}
         />
       </div>
       {check &&
@@ -113,6 +159,10 @@ export default function NavAddImages({ selectedAddImages, setSelectedAddImages, 
           selectedAddImages={selectedAddImages}
           setFileImages={setFileImages}
           setSelectedAddImages={setSelectedAddImages}
+          album={album}
+          userlove={userlove}
+          setLoadingStates={setLoadingStates}
+          saveImages={saveImages}
         />}
     </motion.div>
   )

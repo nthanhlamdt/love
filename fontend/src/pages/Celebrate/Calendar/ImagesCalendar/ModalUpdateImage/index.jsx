@@ -2,17 +2,17 @@ import { Upload, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { patchCelebrateImages } from '../../../../../api/api'
+import Loading from '~/components/Loading'
 
 export default function ModalUpdateImage({ setIsModal, type, setImages, setTexts }) {
   const [preview, setPreview] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
-  const userLove = JSON.parse(localStorage.getItem('userLove'))
+  const [isLoading, setIsLoading] = useState(false)
   const [dataUpdate, setDataUpdate] = useState({
     type: type,
     file: '',
-    text: '',
-    userLoveId: userLove._id
+    text: ''
   })
 
   const handleDragOver = (e) => {
@@ -49,13 +49,14 @@ export default function ModalUpdateImage({ setIsModal, type, setImages, setTexts
   }
 
   const handleSubmit = () => {
-    if (!dataUpdate.file || !dataUpdate.type || !dataUpdate.text || !dataUpdate.userLoveId) {
+    if (!dataUpdate.file || !dataUpdate.type || !dataUpdate.text ) {
       toast.error('Vui lòng nhập đầy đủ thông tin để cập nhật')
     }
     else if (dataUpdate.text.length > 16) {
       toast.error('Thông tin ảnh vượt quá 16 kí tự')
     }
     else {
+      setIsLoading(true)
       patchCelebrateImages({
         file: dataUpdate.file,
         text: dataUpdate.text,
@@ -63,7 +64,6 @@ export default function ModalUpdateImage({ setIsModal, type, setImages, setTexts
         type: dataUpdate.type
       })
         .then((data) => {
-          console.log(data)
           setImages([
             data.image1,
             data.image2,
@@ -77,6 +77,7 @@ export default function ModalUpdateImage({ setIsModal, type, setImages, setTexts
             data.text3,
             data.text4
           ])
+          setIsLoading(false)
           toast.success('Cập nhật thành công')
           setIsModal(false)
         })
@@ -87,77 +88,80 @@ export default function ModalUpdateImage({ setIsModal, type, setImages, setTexts
   }
 
   return (
-    <div className='fixed z-[999] top-0 inset-0 bg-[rgba(0,0,0,0.2)] flex justify-center items-center'>
-      <div className='relative bg-white w-96 max-w-5/6 p-5 rounded-lg text-center'>
-        <h2 className="text-3xl font-bold text-pink-600">THÔNG TIN ẢNH</h2>
-        <span
-          className='absolute top-5 right-5 text-pink-600 cursor-pointer'
-          onClick={() => setIsModal(false)}
-        >
-          <X />
-        </span>
-
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text text-xl mt-5 text-pink-600">Hình ảnh</span>
-          </div>
-          <div
-            className={`relative border-2 border-dashed rounded-lg p-4 text-center ${
-              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-            } transition-colors duration-300 ease-in-out`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            {preview ? (
-              <div className='relative'>
-                <img src={preview} alt='Preview' className='mx-auto max-h-64 rounded-lg' />
-              </div>
-            ) : (
-              <>
-                <Upload className='mx-auto h-12 w-12 text-gray-400' />
-                <p className='mt-2 text-sm text-gray-600'>Drag and drop your image here, or click to select</p>
-              </>
-            )}
-            <input
-              type='file'
-              ref={fileInputRef}
-              onChange={handleFileInput}
-              accept='image/*'
-              className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
-            />
-          </div>
-        </label>
-
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text text-xl mt-5 text-pink-600">Thông tin ảnh</span>
-          </div>
-          <input
-            type="text"
-            placeholder="Thông tin ảnh"
-            className="input input-bordered w-full"
-            value={dataUpdate.text}
-            onChange={e => setDataUpdate({ ...dataUpdate, text: e.target.value })}
-          />
-        </label>
-
-        <div className='flex items-center justify-end mt-4'>
-          <button
-            className='px-4 py-2 border border-pink-600 font-bold text-white bg-pink-600 rounded-md mr-2 hover:bg-pink-700'
-            onClick={handleSubmit}
-          >
-            Lưu
-          </button>
-
-          <button
+    <>
+      {isLoading && <Loading />}
+      <div className='fixed z-[999] top-0 inset-0 bg-[rgba(0,0,0,0.2)] flex justify-center items-center'>
+        <div className='relative bg-white w-96 max-w-5/6 p-5 rounded-lg text-center'>
+          <h2 className="text-3xl font-bold text-pink-600">THÔNG TIN ẢNH</h2>
+          <span
+            className='absolute top-5 right-5 text-pink-600 cursor-pointer'
             onClick={() => setIsModal(false)}
-            className='px-4 py-2 border border-pink-600 font-bold text-pink-600 hover:bg-pink-100 rounded-md'
           >
-            Hủy
-          </button>
+            <X />
+          </span>
+
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text text-xl mt-5 text-pink-600">Hình ảnh</span>
+            </div>
+            <div
+              className={`relative border-2 border-dashed rounded-lg p-4 text-center ${
+                isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+              } transition-colors duration-300 ease-in-out`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {preview ? (
+                <div className='relative'>
+                  <img src={preview} alt='Preview' className='mx-auto max-h-64 rounded-lg' />
+                </div>
+              ) : (
+                <>
+                  <Upload className='mx-auto h-12 w-12 text-gray-400' />
+                  <p className='mt-2 text-sm text-gray-600'>Drag and drop your image here, or click to select</p>
+                </>
+              )}
+              <input
+                type='file'
+                ref={fileInputRef}
+                onChange={handleFileInput}
+                accept='image/*'
+                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+              />
+            </div>
+          </label>
+
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text text-xl mt-5 text-pink-600">Thông tin ảnh</span>
+            </div>
+            <input
+              type="text"
+              placeholder="Thông tin ảnh"
+              className="input input-bordered w-full"
+              value={dataUpdate.text}
+              onChange={e => setDataUpdate({ ...dataUpdate, text: e.target.value })}
+            />
+          </label>
+
+          <div className='flex items-center justify-end mt-4'>
+            <button
+              className='px-4 py-2 border border-pink-600 font-bold text-white bg-pink-600 rounded-md mr-2 hover:bg-pink-700'
+              onClick={handleSubmit}
+            >
+              Lưu
+            </button>
+
+            <button
+              onClick={() => setIsModal(false)}
+              className='px-4 py-2 border border-pink-600 font-bold text-pink-600 hover:bg-pink-100 rounded-md'
+            >
+              Hủy
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

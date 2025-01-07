@@ -7,6 +7,7 @@ import { AuthContextProvider } from './context/authContext.jsx'
 import { AlbumContextProvider } from './context/albumContext.jsx'
 import { NotificationContextProvider } from './context/notificationContext.jsx'
 import { SocketContextProvider } from './context/SocketContext.jsx'
+import { MessageContextProvider } from './context/messageContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ createRoot(document.getElementById('root')).render(
         <SocketContextProvider>
           <AlbumContextProvider>
             <NotificationContextProvider>
-              <App />
+              <MessageContextProvider>
+                <App />
+              </MessageContextProvider>
             </NotificationContextProvider>
           </AlbumContextProvider>
         </SocketContextProvider>

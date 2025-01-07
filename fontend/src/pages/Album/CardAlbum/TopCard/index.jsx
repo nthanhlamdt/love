@@ -14,9 +14,7 @@ export default function TopCard({ album, fileUpload, imageCover, setImageCover, 
   const [showArrowLeft, setShowArrowLeft] = useState(true) // Trạng thái để hiển thị ArrowLeft
 
   const handleUpdateImageCover = () => {
-    
     if (fileUpload) {
-      console.log(fileUpload)
       setLoading(true)
       patchAlbums({ file: fileUpload, albumId: album._id })
         .then(() => {

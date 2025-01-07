@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import MySvgComponent from '../GiftBoxSVG'
 
-export default function GiftBoxRandom() {
+export default function GiftBoxRandom({ image }) {
   const canvasRef = useRef(null)
   const [showFireworks, setShowFireworks] = useState(false)
   const [isShaking, setIsShaking] = useState(true)
@@ -186,53 +186,55 @@ export default function GiftBoxRandom() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#190e14] via-[#0d0d4b] to-[#c76075] overflow-hidden flex items-center justify-center relative">
-      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full"></canvas>
-      {!showFireworks && (
-        <div
-          className={`relative cursor-pointer transform transition-transform duration-300 hover:scale-105 ${isShaking ? 'animate-shake' : ''}`}
-          onClick={handleGiftClick}
-        >
-          <MySvgComponent />
-        </div>
-      )}
+    <div className='fixed inset-0 z-[9999]'>
+      <div className="min-h-screen bg-gradient-to-b from-[#190e14] via-[#0d0d4b] to-[#c76075] overflow-hidden flex items-center justify-center relative">
+        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full"></canvas>
+        {!showFireworks && (
+          <div
+            className={`relative cursor-pointer transform transition-transform duration-300 hover:scale-105 ${isShaking ? 'animate-shake' : ''}`}
+            onClick={handleGiftClick}
+          >
+            <MySvgComponent />
+          </div>
+        )}
 
-      {showGift && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center animate-fade-in">
-          <img
-            src="/placeholder.svg?height=200&width=200"
-            alt="Món quà của bạn"
-            width={200}
-            height={200}
-            className="mx-auto mb-4 rounded-lg shadow-lg"
-          />
-          <h2 className="text-3xl font-bold text-white mb-2">Chúc mừng!</h2>
-          <p className="text-xl text-white">Bạn đã nhận được một món quà đặc biệt!</p>
-        </div>
-      )}
+        {showGift && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center animate-fade-in">
+            <img
+              src={image}
+              alt="Món quà của bạn"
+              width={200}
+              height={200}
+              className="mx-auto mb-4 rounded-lg shadow-lg"
+            />
+            <h2 className="text-3xl font-bold text-white mb-2">Chúc mừng!</h2>
+            <p className="text-xl text-white">Bạn đã nhận được một món quà đặc biệt!</p>
+          </div>
+        )}
 
-      <style jsx>{`
-        @keyframes shake {
-           0% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          50% { transform: translateX(5px); }
-          75% { transform: translateX(-5px); }
-         100% { transform: translateX(0); }
-        }
-        
-        .animate-shake {
-          animation: shake 0.5s ease-in-out infinite;
-        }
-        
-        @keyframes fade-in {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
+        <style jsx>{`
+          @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+          100% { transform: translateX(0); }
+          }
+          
+          .animate-shake {
+            animation: shake 0.5s ease-in-out infinite;
+          }
+          
+          @keyframes fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+          }
 
-        .animate-fade-in {
-          animation: fade-in 1s ease-in-out;
-        }
-      `}</style>
+          .animate-fade-in {
+            animation: fade-in 1s ease-in-out;
+          }
+        `}</style>
+      </div>
     </div>
   )
 }

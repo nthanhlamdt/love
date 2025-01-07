@@ -1,21 +1,34 @@
 import { useRef } from 'react'
 import { Upload } from 'lucide-react'
 
-export default function UploadFile({ setFileImages }) {
+export default function UploadFile({ setFileImages, setLoadingStates }) {
   const fileInputRef = useRef(null)
 
-  const handelFileImageChange = (e) => {
+  const handleFileImageChange = (e) => {
     const files = Array.from(e.target.files)
-    const newImages = files.map(file => URL.createObjectURL(file))
-    const arrayObjectFiles = files.map((file, index) => {
+
+    // Kiểm tra loại tệp và kích thước nếu cần
+    const validFiles = files.filter(file => {
+      const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/')
+      const isValidSize = file.size <= 100 * 1024 * 1024 // Giới hạn kích thước file dưới 100MB
+
+      return isValidType && isValidSize
+    })
+
+    // Tạo Object URL cho các tệp hợp lệ
+    const newImages = validFiles.map(file => URL.createObjectURL(file))
+
+    const arrayObjectFiles = validFiles.map((file, index) => {
+      setLoadingStates(prev => [...prev, false])
       return {
         file: file,
-        name: '',
-        time: '',
-        location: '',
+        name: file.name, // Lấy tên file từ file.name
+        time: new Date().toISOString(), // Thời gian tải lên
+        location: '', // Bạn có thể gán địa điểm nếu cần
         src: newImages[index]
       }
     })
+
     setFileImages(prevImages => [...prevImages, ...arrayObjectFiles])
   }
 
@@ -26,8 +39,8 @@ export default function UploadFile({ setFileImages }) {
         multiple
         className="hidden"
         ref={fileInputRef}
-        onChange={handelFileImageChange}
-        accept="image/*"
+        onChange={handleFileImageChange}
+        accept="image/*, video/*"
       />
       <button
         onClick={() => fileInputRef.current?.click()}

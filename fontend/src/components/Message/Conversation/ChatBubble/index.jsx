@@ -2,9 +2,10 @@ import { motion } from 'framer-motion'
 import HeartPlace from '../HeartPlace'
 
 export default function ChatBubble({ message, type }) {
+
   return (
     <motion.div
-      className={`mt-2 flex ${type == 'send'? 'justify-end' : 'justify-start'} mb-y-1`}
+      className={`relative mt-2 flex ${type == 'send'? 'justify-end' : 'justify-start'} mb-y-1`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function Emoji({ iconTypeCelebrate, setIconTypeCelebrate, setData, data }) {
+export default function Emoji({ setDataType, dataType }) {
   const [emojiIndex, setEmojiIndex] = useState(0)
 
   const coupleEmojis = [
@@ -62,9 +62,7 @@ export default function Emoji({ iconTypeCelebrate, setIconTypeCelebrate, setData
             key={index}
             className="text-center text-2xl hover:bg-pink-100 cursor-pointer"
             onClick={() => {
-              const dataTypeOld = data.type.replace(iconTypeCelebrate, '')
-              setIconTypeCelebrate(emoji)
-              setData({ ...data, type: (emoji + dataTypeOld) })
+              setDataType({ ...dataType, icon: emoji })
             }}
           >
             {emoji}

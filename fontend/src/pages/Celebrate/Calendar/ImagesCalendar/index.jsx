@@ -8,32 +8,29 @@ export default function ImagesCalendar() {
   const [isModal, setIsModal] = useState(false)
   const [images, setImages] = useState([])
   const [texts, setTexts] = useState([])
-  const userLove = JSON.parse(localStorage.getItem('userLove'))
   const [typeUpdate, setTypeUpdate] = useState(1)
 
   useEffect(() => {
-    if (userLove) {
-      getCelebrate({ userLoveId: userLove._id })
-        .then((data) => {
-          setImages([
-            data.image1,
-            data.image2,
-            data.image3,
-            data.image4
-          ])
+    getCelebrate()
+      .then((data) => {
+        setImages([
+          data.image1,
+          data.image2,
+          data.image3,
+          data.image4
+        ])
 
-          setTexts([
-            data.text1,
-            data.text2,
-            data.text3,
-            data.text4
-          ])
-        })
-        .catch(() => {
-          toast.error('Chưa kết nối')
-        })
-    }
-  })
+        setTexts([
+          data.text1,
+          data.text2,
+          data.text3,
+          data.text4
+        ])
+      })
+      .catch(() => {
+        toast.error('Chưa kết nối')
+      })
+  }, [])
 
   const handleTypeUpdate = (type) => {
     setIsModal(true)
@@ -48,10 +45,10 @@ export default function ImagesCalendar() {
           onClick={() => handleTypeUpdate(1)}
         >
           <img
-            src={images[0]}
+            src={images[0] ? images[0] : '/assets/celebrate_image_1.png'}
             alt="Couple photo 1"
             className="object-cover object-center h-44 w-full" />
-          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[0]}</span>
+          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[0] ? texts[0] : 'Yêu là cảm nhận'}</span>
         </div>
 
         <div
@@ -62,7 +59,7 @@ export default function ImagesCalendar() {
             src={images[1] ? images[1] : '/assets/celebrate_image_2.png'}
             alt="Couple photo 2"
             className="object-cover object-center h-44 w-full" />
-          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[1]}</span>
+          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[1] ? texts[1] : 'Thương là nhớ'}</span>
         </div>
 
         <div
@@ -73,7 +70,7 @@ export default function ImagesCalendar() {
             src={images[2] ? images[2] : '/assets/celebrate_image_3.png'}
             alt="Couple photo 3"
             className="object-cover object-center h-44 w-full" />
-          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[2]}</span>
+          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[2] ? texts[2] : 'Yêu là không ngại'}</span>
         </div>
 
         <div
@@ -84,7 +81,7 @@ export default function ImagesCalendar() {
             src={images[3] ? images[3] : '/assets/celebrate_image_4.png'}
             alt="Couple photo 4"
             className="object-cover object-center h-44 w-full" />
-          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[3]}</span>
+          <span className="py-3 text-pink-500 font-lovelight text-2xl font-semibold">{texts[3] ? texts[3] : 'Hạnh phúc là yêu'}</span>
         </div>
       </div>
 

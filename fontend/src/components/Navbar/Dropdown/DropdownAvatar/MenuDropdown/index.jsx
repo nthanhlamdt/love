@@ -37,7 +37,8 @@ export default function MenuDropdown() {
         >Đăng xuất</Link>
       </li>
 
-      {isOpenInformationPerional && <ModalInformationPersonal setIsOpenInformationPerional={setIsOpenInformationPerional} />}
+      {isOpenInformationPerional &&
+        <ModalInformationPersonal setIsOpenInformationPerional={setIsOpenInformationPerional} />}
     </ul>
   )
 }

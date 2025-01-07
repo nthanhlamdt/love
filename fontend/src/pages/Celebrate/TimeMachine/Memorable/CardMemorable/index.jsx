@@ -1,10 +1,23 @@
 import { motion, useAnimation } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Card from './Card'
+import { getTimeMachine } from '~/api/api'
+import { toast } from 'react-toastify'
 
 export default function CardMemorable({ statusTime, setStatusTime }) {
   const controls = useAnimation()
+  const userLoveId = JSON.parse(localStorage.getItem('userLove'))._id
+  const [listTimeMachines, setListTimeMachines] = useState([])
 
+  useEffect(() => {
+    getTimeMachine({ userLoveId })
+      .then(data => {
+        setListTimeMachines(data)
+      })
+      .catch(() => {
+        toast.error('Lỗi lấy dữ liệu time machine')
+      })
+  }, [])
   const startAnimation = () => {
     controls.start({
       scale: statusTime? [1, 0, 0] : [0, 0, 1], // Từ 1 thu nhỏ xuống 0
@@ -35,7 +48,9 @@ export default function CardMemorable({ statusTime, setStatusTime }) {
         }}
       >
 
-        <Card />
+        {
+          listTimeMachines.length > 0 && <Card listTimeMachines={listTimeMachines} />
+        }
 
         <button
           className="py-3 mt-5  px-4 bg-pink-500 w-1/2 max-w-96 rounded-3xl font-bold"

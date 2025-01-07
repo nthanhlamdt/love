@@ -1,7 +1,8 @@
 import { useRef } from 'react'
-import Letter from './Letter'
+import LoveRequest from './LoveRequest'
+import Event from './Event'
 
-export default function LoveRequest({ setHandleOpenModal, notification }) {
+export default function TypeNotifications({ setHandleOpenModal, notification, notificationType }) {
   const letterRef = useRef(null)
 
   const handleClickOutside = (event) => {
@@ -16,7 +17,8 @@ export default function LoveRequest({ setHandleOpenModal, notification }) {
       onClick={handleClickOutside}
     >
       <div ref={letterRef} className="rounded-lg max-w-lg w-full">
-        <Letter notification={notification}/>
+        {notificationType === 'love_request' && <LoveRequest notification={notification} />}
+        {notificationType === 'event' && <Event notification={notification} />}
       </div>
     </div>
   )
