@@ -17,7 +17,7 @@ export default function CardMemorable({ statusTime, setStatusTime }) {
       .catch(() => {
         toast.error('Lỗi lấy dữ liệu time machine')
       })
-  }, [])
+  })
   const startAnimation = () => {
     controls.start({
       scale: statusTime? [1, 0, 0] : [0, 0, 1], // Từ 1 thu nhỏ xuống 0

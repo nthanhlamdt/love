@@ -6,7 +6,7 @@
   "author": "Ngô Thành Lâm",
   "description": "Tặng bồ",
   "engines": {
-    "node": "22.4.0"
+    "node": "18.20.5"
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",

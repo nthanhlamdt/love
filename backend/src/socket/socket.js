@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173'], // Chỉnh sửa với địa chỉ frontend của bạn
+    origin: ['http://localhost:5173', 'https://love-fontend.onrender.com'], // Chỉnh sửa với địa chỉ frontend của bạn
     methods: ["GET", "POST"],
   },
 });

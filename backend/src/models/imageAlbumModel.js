@@ -12,24 +12,7 @@ const imageAlbumSchema = new mongoose.Schema({
   src: {
     type: String,
     required: true
-  },
-  
-  name: {
-    type: String,
-    required: true,
-    minlength: 1,
-  },
-
-  location: {
-    type: String,
-    required: true,
-    minlength: 1,
-  },
-  time: {
-    type: Date,
-    required: true
   }
-  ,
 }, { timestamps: true })
 
 const imageAlbum = mongoose.model('ImageAlbum', imageAlbumSchema)

@@ -1,4 +1,4 @@
-import { Download, Hand, Move, PencilLine, Trash2 } from 'lucide-react'
+import { Download, Hand, Move, Trash2 } from 'lucide-react'
 import { deleteImageAlbums } from '../../../../../../api/api'
 import { toast } from 'react-toastify'
 import { useAlbumContext } from '~/context/albumContext'
@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import Loading from '~/components/Loading'
 
-export default function DropDownMenu({ menuRef, handleOpenImage, image, setIsModalUpdate }) {
+export default function DropDownMenu({ menuRef, handleOpenImage, image }) {
   const { setAlbums, albums } = useAlbumContext()
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -42,10 +42,6 @@ export default function DropDownMenu({ menuRef, handleOpenImage, image, setIsMod
       })
   }
 
-  const handleUpdateImage = async () => {
-    setIsModalUpdate(true)
-  }
-
   const handleDownloadImage = async (downloadUrl) => {
     try {
       // Fetch file từ URL
@@ -76,49 +72,41 @@ export default function DropDownMenu({ menuRef, handleOpenImage, image, setIsMod
   }
 
   return (
-    <div>
+    <div className='absolute z-[9999] top-8 md:top-10 lg:top-14 right-2 border border-pink-300 rounded-lg'>
       <nav
-        className='list-none rounded-md bg-white overflow-hidden p-2 w-52 text-pink-500 text-sm font-semibold'
+        className='list-none rounded-md bg-white overflow-hidden p-2 w-32 md:w-44 lg:w-52 text-pink-500 text-sm font-semibold'
         ref={menuRef}
       >
         {isLoading && <Loading />}
         <ul>
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 text-xs md:text-sm cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={handleOpenImage}
           >
-            <span className='mr-2'><Move size={20} /></span>
+            <span className='mr-1 md:mr-2'><Move className='w-3 h-3 md:w-5 md:h-5' /></span>
             Mở
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 text-xs md:text-sm cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={handleDeleteImage}
           >
-            <span className='mr-2'><Trash2 size={20} /></span>
+            <span className='mr-1 md:mr-2'><Trash2 className='w-3 h-3 md:w-5 md:h-5' /></span>
             Xóa
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
-            onClick={handleUpdateImage}
+            className='flex items-center p-1 md:p-2 text-xs md:text-sm cursor-pointer rounded-sm hover:bg-pink-100'
           >
-            <span className='mr-2'><PencilLine size={20} /></span>
-            Chỉnh sửa
-          </li>
-
-          <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
-          >
-            <span className='mr-2'><Hand size={20} /></span>
+            <span className='mr-1 md:mr-2'><Hand className='w-3 h-3 md:w-5 md:h-5' /></span>
             Di chuyển
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 text-xs md:text-sm cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={() => {handleDownloadImage(image.src)}}
           >
-            <span className='mr-2'><Download size={20} /></span>
+            <span className='mr-1 md:mr-2'><Download className='w-3 h-3 md:w-5 md:h-5' /></span>
             Tải xuống
           </li>
         </ul>

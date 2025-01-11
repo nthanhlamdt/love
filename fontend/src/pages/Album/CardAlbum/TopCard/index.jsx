@@ -44,17 +44,6 @@ export default function TopCard({ album, fileUpload, imageCover, setImageCover, 
     }
   }, [])
 
-  // const handleCheckboxChange = () => {
-  //   const newCheckedState = !isChecked
-  //   setIsChecked(newCheckedState)
-
-  //   if (newCheckedState) {
-  //     setSelectedAlbums((prevSelected) => [...prevSelected, album._id])
-  //   } else {
-  //     setSelectedAlbums((prevSelected) => prevSelected.filter(id => id !== album._id))
-  //   }
-  // }
-
   const handleFileImageChange = (e) => {
     const file = e.target.files[0] // Lấy ảnh đầu tiên
     if (file) {
@@ -74,7 +63,7 @@ export default function TopCard({ album, fileUpload, imageCover, setImageCover, 
       <img
         src={imageCover ? imageCover : album.coverImage}
         alt={album.name}
-        className='hero w-full h-64 object-cover object-center'
+        className='hero w-full h-28 sm:h-52 xl:h-64 object-cover object-center'
         loading="lazy"
       />
 
@@ -100,7 +89,7 @@ export default function TopCard({ album, fileUpload, imageCover, setImageCover, 
           <div className={`absolute inset-0 ${menuVisible ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-opacity duration-300 text-white`}>
             <EllipsisVertical
               ref={buttonMenuRef}
-              className='float-end mr-2 mt-2 cursor-pointer bg-[rgba(0,0,0,0.5)] rounded-full w-8 h-8'
+              className='float-end mr-2 mt-2 cursor-pointer bg-[rgba(0,0,0,0.5)] rounded-full w-4 h-4 md:w-8 md:h-8'
               onClick={(e) => {
                 e.stopPropagation() // Ngăn chặn sự kiện click lan ra ngoài
                 setMenuVisible((prev) => !prev)

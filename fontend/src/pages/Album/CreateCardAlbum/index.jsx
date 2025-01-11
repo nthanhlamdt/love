@@ -13,7 +13,7 @@ export default function CreateCardAlbum() {
           src='/assets/createAlbum.png'
           alt='test'
           className='hero w-[50%] object-cover object-center' />
-        <p className='mt-5 text-xl text-center text-pink-500'>Nhấn vào đây để tạo album ảnh, lưu giữ mọi khoảnh khắc đáng nhớ nhé! 📸✨</p>
+        <p className='mt-5 text-xs sm:text-sm xl:text-xl text-center text-pink-500'>Nhấn vào đây để tạo album ảnh, lưu giữ mọi khoảnh khắc đáng nhớ nhé! 📸✨</p>
       </div>
 
       {isModal && (<ModalCreateAlbum setIsModal={ setIsModal } scale={50} />)}

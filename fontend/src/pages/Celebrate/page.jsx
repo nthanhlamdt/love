@@ -12,8 +12,7 @@ export default function Celebrate() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-[90%] md:max-w-[80%] h-full mx-auto py-5">
-
+      <div className="max-w-[90%] md:max-w-[80%] h-[90%] m-auto py-5">
         {selectedCalendar ?
           <div className='h-full lg:flex lg:justify-center lg:items-center'>
             <Calendar

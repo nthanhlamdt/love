@@ -20,7 +20,7 @@ const { app, server } = require("./socket/socket")
 const connectDB = require('./config/db')
 
 app.use(cors({
-  origin: ['https://love-fontend.onrender.com'],
+  origin: ['https://love-fontend.onrender.com', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
 }))
 

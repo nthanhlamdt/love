@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { updateUser } from '~/api/api'
 import Loading from '~/components/Loading'
 import FormUpdateAvatar from './FormUpdateAvatar'
+import { isValidPhoneNumber } from '~/utils/isValidPhoneNumber'
 
 export default function ModalInformationPersonal({ setIsOpenInformationPerional }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -26,8 +27,10 @@ export default function ModalInformationPersonal({ setIsOpenInformationPerional 
 
   const handleSave = () => {
     if (!data.fullName || !data.gender || !data.phoneNumber || !data.dateBirth) {
-      return toast.error('Vui lòng nhập đầy đủ thông tin')
+      return toast.error('Vui lòng nhập đầy đủ thông tin!')
     }
+
+    if (!isValidPhoneNumber(data.phoneNumber)) return toast.error('Số điện thoại không hợp lệ!')
 
     setIsLoading(true)
     updateUser({

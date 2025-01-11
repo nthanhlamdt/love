@@ -13,14 +13,14 @@ export default function ModalImage({ imageCover, setImageCover, album }) {
     <div>
       <div className='absolute flex justify-center items-center z-[9999] inset-0 bg-[rgba(0,0,0,0.8)]'>
         <X
-          size={40}
-          className=' fixed top-14 right-14 text-white cursor-pointer'
+          size={35}
+          className=' fixed top-14 right-7 text-white cursor-pointer p-2 rounded-full bg-[rgba(0,0,0,0.3)]'
           onClick={() => setImageCover(null)}
         />
 
         <div className='flex justify-between items-center h-full w-[90%] select-none'>
           <BiLeftArrow
-            size={40}
+            size={35}
             className='text-white cursor-pointer w-10'
             onClick={() => imageCover > 0 ? setImageCover(imageCover - 1) : setImageCover(album.images.length - 1)}
           />
@@ -29,7 +29,7 @@ export default function ModalImage({ imageCover, setImageCover, album }) {
             isVideo(album.images[imageCover]) ? (
               <video
                 key={album.images[imageCover].src}
-                className='max-h-[90%] object-cover object-center rounded-lg'
+                className='max-h-[90%] max-w-[80%] object-cover object-center rounded-lg'
                 controls
                 autoPlay
                 loop
@@ -42,12 +42,12 @@ export default function ModalImage({ imageCover, setImageCover, album }) {
                 src={album.images[imageCover].src}
                 alt={album.images[imageCover].name}
                 loading="lazy"
-                className='max-h-[90%] object-cover object-center rounded-lg' />
+                className='max-h-[90%] max-w-[80%] object-cover object-center rounded-lg' />
             )
           }
 
           <BiRightArrow
-            size={40}
+            size={35}
             className='text-white cursor-pointer w-10'
             onClick={() => imageCover < album.images.length - 1 ? setImageCover(imageCover + 1) : setImageCover(0)}
           />
