@@ -84,13 +84,13 @@ export default function LoveRequest({ notification }) {
         <div className='space-y-4'>
           <div className='text-sm text-pink-700 flex items-center justify-around'>
             <img
-              src='/public/assets/send_letter.png'
+              src='/assets/send_letter.png'
               alt='Thư'
               className='w-20'
             />
             <p className='ml-3 text-lg font-bold'>{notification.message}</p>
             <img
-              src='/public/assets/send_letter.png'
+              src='/assets/send_letter.png'
               alt='Thư'
               className='w-20'
             />
