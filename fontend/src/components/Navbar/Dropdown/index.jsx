@@ -27,7 +27,7 @@ export default function Dropdown({ user }) {
 
   return (
     <div>
-      <div className="w-36 flex items-center dropdown dropdown-end nav-end mr-10">
+      <div className="w-36 flex items-center dropdown dropdown-end nav-end mr-2 xl:mr-10">
         <div className="w-36 flex items-center mx-10 dropdown dropdown-end justify-end">
           <DropdownNotification
             notificationDropdownRef={notificationDropdownRef}

@@ -40,7 +40,7 @@ function Home() {
     return () => {
       socket.off('newCouple', handleSetLoveUser)
     }
-  }, [socket])
+  }, [authUser, setAuthUser, socket])
 
   return (
     <div>

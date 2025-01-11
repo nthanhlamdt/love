@@ -14,14 +14,14 @@ export default function Menu({ album, menuRef, fileInputRef }) {
   return (
     <div
       ref={menuRef}
-      className='absolute top-12 right-3 bg-white shadow-lg rounded z-10'
+      className='absolute top-7 md:top-12 right-3 bg-white shadow-lg rounded z-10'
     >
-      {loading && <span className=" absolute loading loading-spinner loading-lg end-0 text-pink-500"></span>}
+      {loading && <span className="absolute loading loading-spinner loading-lg end-0 text-pink-500"></span>}
       <nav
-        className='list-none overflow-hidden p-2 w-52 text-pink-500 text-sm font-semibold'>
+        className='list-none overflow-hidden p-2 w-40 md:w-52 text-pink-500 text-sm font-semibold'>
         <ul>
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={() => navigate(`/album/${album._id}`)}
           >
             <span className='mr-2'><Move size={20} /></span>
@@ -29,7 +29,7 @@ export default function Menu({ album, menuRef, fileInputRef }) {
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={() => document.getElementById('modal_delete_album').showModal()}
           >
             <span className='mr-2'><Trash2 size={20} /></span>
@@ -37,7 +37,7 @@ export default function Menu({ album, menuRef, fileInputRef }) {
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={() => document.getElementById('modal_update_album').showModal()}
           >
             <span className='mr-2'><PencilLine size={20} /></span>
@@ -45,16 +45,11 @@ export default function Menu({ album, menuRef, fileInputRef }) {
           </li>
 
           <li
-            className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100'
+            className='flex items-center p-1 md:p-2 cursor-pointer rounded-sm hover:bg-pink-100'
             onClick={() => fileInputRef.current?.click()}
           >
             <span className='mr-2'><ImageUp size={20} /></span>
             Cập nhật ảnh bìa
-          </li>
-
-          <li className='flex items-center p-2 cursor-pointer rounded-sm hover:bg-pink-100' onClick={() => {/* Xử lý tải xuống */}}>
-            <span className='mr-2'><Download size={20} /></span>
-            Tải xuống
           </li>
         </ul>
       </nav>

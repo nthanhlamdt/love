@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { updateAlbums } from '../../../../../../api/api'
 import { useAlbumContext } from '../../../../../../context/albumContext'
+import Input from '~/components/Input'
+import Label from '~/components/Label'
 
 export default function ModalUpdateAlbum({ album }) {
   const { setAlbums } = useAlbumContext()
@@ -23,7 +25,7 @@ export default function ModalUpdateAlbum({ album }) {
       .then(( data ) => {
         toast.success('Cập nhật thành công!')
         setAlbums(prevAlbums => prevAlbums.map(a => {
-          return a._id === data._id ? data : a
+          return a._id === data._id ? { ...a, ...data } : a
         }))
         modalRef.current.close()
       })
@@ -50,20 +52,25 @@ export default function ModalUpdateAlbum({ album }) {
           <h3 className="font-bold text-xl text-pink-600">Cập nhật album</h3>
 
           <div className="flex flex-col my-5">
-            <span className="text-pink-500 mb-1">Tên album *</span>
-            <input
-              type="text"
-              value={dataUpdate.name}
-              className="text-pink-500 p-2 border-4 border-pink-400 outline-pink-500 rounded-lg mr-5"
-              onChange={e => setDataUpdate({ ...dataUpdate, name: e.target.value })}
-            />
-            <span className="text-pink-500 my-1">Mô tả *</span>
-            <input
-              type="text"
-              value={dataUpdate.description}
-              className="text-pink-500 p-2 border-4 border-pink-400 outline-pink-500 rounded-lg mr-5"
-              onChange={e => setDataUpdate({ ...dataUpdate, description: e.target.value })}
-            />
+            <div>
+              <Label title={'Tên album *'} />
+              <Input
+                title={'Tên album'}
+                type="text"
+                value={dataUpdate.name}
+                onChange={e => setDataUpdate({ ...dataUpdate, name: e.target.value })}
+              />
+            </div>
+            <div className='mt-2'>
+              <Label title={'Mô tả *'} />
+              <Input
+                type="text"
+                title={'Mô tả'}
+                value={dataUpdate.description}
+                className="text-pink-500 p-2 border-4 border-pink-400 outline-pink-500 rounded-lg mr-5"
+                onChange={e => setDataUpdate({ ...dataUpdate, description: e.target.value })}
+              />
+            </div>
           </div>
 
           <div className='float-end flex items-center'>

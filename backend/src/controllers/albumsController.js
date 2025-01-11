@@ -170,7 +170,7 @@ const updateAlbum = async (req, res) => {
       return res.status(404).json({ error: 'Cập nhật không thành công' })
     }
 
-    const images = await imageAlbum.find({ albumID: albumId })
+    const images = await imageAlbum.find({ albumId: albumId })
 
     res.json({
       ...updatedAlbum.toObject(),

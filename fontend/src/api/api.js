@@ -101,15 +101,11 @@ export const updateAlbums = async ({ albumId, name, description }) => {
 }
 
 // Thêm ảnh vào album
-export const addImageToAlbum = async ({ data, file }) => {
+export const addImageToAlbum = async ({ albumId, file }) => {
   const formData = new FormData()
 
-  console.log(data)
   formData.append('file', file)
-  formData.append('albumId', data.albumId)
-  formData.append('name', data.name)
-  formData.append('time', data.time)
-  formData.append('location', data.location)
+  formData.append('albumId', albumId)
 
   try {
     // Gửi POST request lên server với 'multipart/form-data'
@@ -130,11 +126,6 @@ export const deleteImageAlbums = async ({ imageId }) => {
   const response = await axiosInstance.delete('/albums/image', {
     data: { imageId }
   })
-  return response.data
-}
-
-export const updateImageAlbum = async ({ imageId, name, time, location }) => {
-  const response = await axiosInstance.put('/albums/image', { imageId, name, time, location })
   return response.data
 }
 

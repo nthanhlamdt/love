@@ -3,9 +3,9 @@ import { toast } from 'react-toastify'
 import Webcam from 'react-webcam'
 import { IoMdCamera } from 'react-icons/io'
 import { FiArrowUpRight } from 'react-icons/fi'
-import { FaCameraRetro } from 'react-icons/fa' // Icon để chuyển camera
 import { uploadPost } from '~/api/api'
 import Loading from '~/components/Loading'
+import { Download, SwitchCamera, X } from 'lucide-react'
 
 function Camera({ pictures, setPictures }) {
   const webcamRef = useRef(null)
@@ -27,9 +27,7 @@ function Camera({ pictures, setPictures }) {
   }
 
   const [data, setData] = useState({
-    id: pictures.length + 1,
     src: '',
-    user: 'Ngô Thành Lâm',
     title: ''
   })
 
@@ -41,16 +39,13 @@ function Camera({ pictures, setPictures }) {
 
   const capturePhoto = () => {
     if (!url) {
-      const imageSrc = webcamRef.current.getScreenshot()
+      const imageSrc = webcamRef.current.getScreenshot({ format: 'image/jpeg', quality: 1 })
       setUrl(imageSrc)
       setData({ ...data, src: base64ToBlob(imageSrc) })
     }
     else {
-      setUrl(null)
       setData({
-        id: pictures.length + 1,
         src: '',
-        user: 'Ngô Thành Lâm',
         title: ''
       })
       setIsLoading(true)
@@ -63,6 +58,7 @@ function Camera({ pictures, setPictures }) {
           setIsLoading(false)
           setPictures([{ ...data, userPostId: { avatar: user.avatar, fullName: user.fullName, _id: user._id } }, ...pictures])
           toast.success('Đăng ảnh thành công')
+          setUrl(null)
         })
     }
   }
@@ -93,7 +89,7 @@ function Camera({ pictures, setPictures }) {
             className='flex justify-center items-center absolute top-8 right-8 bg-white w-12 h-12 rounded-full border-4 border-pink-400 hover:border-pink-300'
             onClick={toggleCamera} // Nút để chuyển camera
           >
-            <FaCameraRetro className='text-xl text-pink-400 hover:text-pink-300' />
+            <SwitchCamera className='text-xl text-pink-400 hover:text-pink-300' />
           </button>
 
           <button
@@ -117,12 +113,22 @@ function Camera({ pictures, setPictures }) {
                 onChange={e => setData({ ...data, title: e.target.value })}
               />
 
-              <button
-                className='flex justify-center items-center absolute bottom-8 bg-white w-16 h-16 rounded-full border-4 border-green-500 hover:border-green-400'
-                onClick={capturePhoto}
-              >
-                <FiArrowUpRight className='text-8xl text-green-500 hover:text-green-400' />
-              </button>
+              <div className='absolute bottom-8 flex justify-around w-full'>
+                <button onClick={() => setUrl(null)}>
+                  <X className='w-10 h-10 text-green-500 hover:text-green-400' />
+                </button>
+
+                <button
+                  className='flex justify-center items-center  bg-white w-16 h-16 rounded-full border-4 border-green-500 hover:border-green-400'
+                  onClick={capturePhoto}
+                >
+                  <FiArrowUpRight className='text-8xl text-green-500 hover:text-green-400' />
+                </button>
+
+                <button>
+                  <Download className='w-10 h-10 text-green-500 hover:text-green-400' />
+                </button>
+              </div>
             </div>
           )}
         </div>

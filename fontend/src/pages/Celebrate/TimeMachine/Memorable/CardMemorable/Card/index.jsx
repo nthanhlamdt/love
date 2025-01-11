@@ -67,8 +67,8 @@ export default function MemoryGallery({ listTimeMachines }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 h-[70%] flex flex-col items-center justify-center">
-      <div className="w-full max-w-6xl mx-auto overflow-hidden relative rounded-2xl shadow-2xl h-[70vh] bg-[rgba(255,255,255,0.2)] backdrop-blur-md">
+    <div className="container mx-auto h-[60%] flex flex-col items-center justify-center">
+      <div className="w-full max-w-6xl mx-auto overflow-hidden relative rounded-2xl shadow-2xl h-full bg-[rgba(255,255,255,0.2)] backdrop-blur-md">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}
@@ -81,7 +81,7 @@ export default function MemoryGallery({ listTimeMachines }) {
               x: { type: 'spring', stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 }
             }}
-            className="flex flex-col-reverse md:flex-row items-stretch h-full absolute w-full"
+            className="flex flex-col-reverse md:flex-row h-full absolute w-full bottom-0 left-0 justify-around"
           >
             <motion.div
               className="md:w-1/2 p-8 flex flex-col justify-center"
@@ -91,11 +91,11 @@ export default function MemoryGallery({ listTimeMachines }) {
                 opacity: { duration: 0.2 }
               }}
             >
-              <h2 className="text-4xl md:text-4xl px-5 lg:text-5xl xl:text-6xl font-bold mb-1 text-wrap text-pink-600 leading-tight">
+              <h2 className="text-2xl md:text-3xl lg:4xl px-5 lg:text-5xl xl:text-6xl font-bold mb-1 text-wrap text-pink-600 leading-tight">
                 {currentMemory.name}
               </h2>
 
-              <p className="text-xl md:text-xl px-5 text-pink-600 mb-2 leading-relaxed">
+              <p className="text-xl md:text-2xl lg:3xl px-5 text-pink-600 mb-2 leading-relaxed">
                 {currentMemory.description}
               </p>
 
@@ -112,7 +112,7 @@ export default function MemoryGallery({ listTimeMachines }) {
             </motion.div>
 
             <motion.div
-              className="md:w-1/2 relative overflow-hidden rounded-r-2xl"
+              className="md:w-1/2 relative overflow-hidden"
               variants={contentVariants}
               transition={{
                 x: { type: 'spring', stiffness: 300, damping: 30 },
@@ -122,7 +122,7 @@ export default function MemoryGallery({ listTimeMachines }) {
               <img
                 src={currentMemory.image}
                 alt={currentMemory.name}
-                className="w-full h-full object-cover object-center"
+                className="h-full w-full object-cover object-center"
               />
             </motion.div>
           </motion.div>
