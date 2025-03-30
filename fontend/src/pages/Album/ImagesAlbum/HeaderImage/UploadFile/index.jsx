@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import Loading from '~/components/Loading'
 
-export default function UploadFile({ album }) {
+export default function UploadFile() {
   const fileInputRef = useRef(null)
   const { setAlbums } = useAlbumContext()
   const userlove = JSON.parse(localStorage.getItem('userLove')) || {}
@@ -22,17 +22,15 @@ export default function UploadFile({ album }) {
     const newFiles = []
 
     try {
-      await Promise.all(
-        files.map(async (file) => {
-          try {
-            const dt = await addImageToAlbum({ albumId: id, file })
-            newFiles.push(dt)
-            setUploadCount((prev) => prev + 1)
-          } catch (error) {
-            toast.error(`Lỗi khi thêm file: ${file.name}`)
-          }
-        })
-      )
+      files.map(async (file) => {
+        try {
+          const dt = await addImageToAlbum({ albumId: id, file })
+          newFiles.push(dt)
+          setUploadCount((prev) => prev + 1)
+        } catch (error) {
+          toast.error(`Lỗi khi thêm file: ${file.name}`)
+        }
+      })
 
       if (newFiles.length > 0) {
         setAlbums((prevAlbums) => {
@@ -47,20 +45,21 @@ export default function UploadFile({ album }) {
           return updatedAlbums
         })
 
-        try {
-          await sendNotification({
-            type: 'add_file_album',
-            title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
-            phoneNumber: userlove.phoneNumber,
-            albumId: album._id
-          })
-          toast.success(`Thêm ${newFiles.length} file thành công!`)
-        } catch (error) {
-          toast.error('Lỗi khi gửi thông báo!')
-        }
+        // try {
+        //   await sendNotification({
+        //     type: 'add_file_album',
+        //     title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
+        //     phoneNumber: userlove.phoneNumber,
+        //     albumId: album._id
+        //   })
+        //   toast.success(`Thêm ${newFiles.length} file thành công!`)
+        // } catch (error) {
+        //   toast.error('Lỗi khi gửi thông báo!')
+        // }
       }
     } catch (error) {
       toast.error('Lỗi khi tải lên tệp!')
+      setLoading(false)
     } finally {
       setLoading(false)
     }
