@@ -13,34 +13,19 @@ export default function UploadFile({ album }) {
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
   const [uploadCount, setUploadCount] = useState(0)
-  const [previewUrls, setPreviewUrls] = useState([])
 
   const handleFileImageChange = async (e) => {
     const files = Array.from(e.target.files)
     setLoading(true)
     setUploadCount(0)
 
-    // Hiển thị trước ảnh/video
-    const urls = files.map((file) => URL.createObjectURL(file))
-    setPreviewUrls(urls)
-
-    // Kiểm tra kích thước file
-    const validFiles = files.filter((file, index) => {
-      const isValidSize = file.size <= 100 * 1024 * 1024 // Giới hạn 100MB
-      if (!isValidSize) {
-        toast.error(`File thứ ${index + 1} có kích thước quá lớn (tối đa 100MB)`)
-        return false
-      }
-      return true
-    })
-
     const newFiles = []
 
     try {
       await Promise.all(
-        validFiles.map(async (file) => {
+        files.map(async (file) => {
           try {
-            const dt = await addImageToAlbum({ albumId: album._id, file })
+            const dt = await addImageToAlbum({ albumId: id, file })
             newFiles.push(dt)
             setUploadCount((prev) => prev + 1)
           } catch (error) {
@@ -67,7 +52,7 @@ export default function UploadFile({ album }) {
             type: 'add_file_album',
             title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
             phoneNumber: userlove.phoneNumber,
-            albumId: album._id,
+            albumId: album._id
           })
           toast.success(`Thêm ${newFiles.length} file thành công!`)
         } catch (error) {
@@ -98,7 +83,6 @@ export default function UploadFile({ album }) {
           className="hidden"
           ref={fileInputRef}
           onChange={handleFileImageChange}
-          accept="image/*, video/*"
         />
         <button
           onClick={() => fileInputRef.current?.click()}
@@ -106,13 +90,6 @@ export default function UploadFile({ album }) {
         >
           <Upload className="mr-2" /> Thêm file
         </button>
-        <div className="grid grid-cols-3 gap-2 mt-4">
-          {previewUrls.map((url, index) => (
-            <div key={index} className="w-full h-32 bg-gray-200 overflow-hidden rounded-lg">
-              <img src={url} alt="preview" className="w-full h-full object-cover" />
-            </div>
-          ))}
-        </div>
       </div>
     </>
   )
