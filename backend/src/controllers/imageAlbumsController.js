@@ -3,32 +3,40 @@ const imageAlbum = require("../models/imageAlbumModel")
 
 const addImagesAlbum = async (req, res) => {
   try {
-    let { albumId } = req.body
-    const imageUrl = req.file?.path
-   
-    const isAlbumId = await album.findOne({ _id: albumId })
-    if (!isAlbumId) {
-      return res.status(400).json({ error: "Album không hợp lệ!" })
+    const { albumId } = req.body;
+    const imageUrl = req.file?.path;
+
+    // Kiểm tra albumId hợp lệ
+    if (!albumId?.trim()) {
+      return res.status(422).json({ error: "Thiếu albumId hợp lệ!" });
     }
 
+    // Kiểm tra album có tồn tại hay không
+    const albumExists = await album.findById(albumId);
+    if (!albumExists) {
+      return res.status(404).json({ error: "Album không tồn tại!" });
+    }
+
+    // Kiểm tra file ảnh đã được tải lên chưa
     if (!imageUrl) {
       return res.status(400).json({ error: "Không có tệp ảnh được tải lên!" });
     }
 
-    const imagesAlbum = new imageAlbum({
-      albumId,
-      src: imageUrl
-    })
+    // Lưu ảnh vào database
+    const newImage = await new imageAlbum({ albumId, src: imageUrl }).save();
 
-    const SavedImageAlbum = await imagesAlbum.save()
-
-      // Trả về phản hồi thành công
-    return res.status(201).json(SavedImageAlbum)
+    // Trả về kết quả thành công
+    return res.status(201).json(newImage);
   } catch (error) {
-    console.error("Error in addImagesAlbum controller:", error.message);
-    return res.status(500).json({ error: error.message || "Internal Server Error", details: error.stack });
+    console.error("Lỗi trong addImagesAlbum:", error.message);
+    return res.status(500).json({
+      error: "Lỗi máy chủ nội bộ",
+      message: error.message,
+      details: error.stack,
+    });
   }
-}
+};
+
 
 const deleteImagesAlbum = async (req, res) => {
   const { imageId } = req.body
