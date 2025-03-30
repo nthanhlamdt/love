@@ -5,6 +5,7 @@ import { useAlbumContext } from '~/context/albumContext'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import Loading from '~/components/Loading'
+import imageCompression from 'browser-image-compression'
 
 export default function UploadFile({ album }) {
   const fileInputRef = useRef(null)
@@ -14,6 +15,15 @@ export default function UploadFile({ album }) {
   const [loading, setLoading] = useState(false)
   const [uploadCount, setUploadCount] = useState(0)
   const [previewUrls, setPreviewUrls] = useState([])
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1, // Kích thước tối đa 1MB
+      maxWidthOrHeight: 1920, // Resize nếu ảnh quá lớn
+      useWebWorker: true,
+    }
+    return await imageCompression(file, options)
+  }
 
   const handleFileImageChange = async (e) => {
     const files = Array.from(e.target.files)
@@ -34,11 +44,12 @@ export default function UploadFile({ album }) {
       return true
     })
 
-    const newFiles = []
-
     try {
+      const compressedFiles = await Promise.all(validFiles.map(compressImage))
+      const newFiles = []
+
       await Promise.all(
-        validFiles.map(async (file) => {
+        compressedFiles.map(async (file) => {
           try {
             const dt = await addImageToAlbum({ albumId: album._id, file })
             newFiles.push(dt)
