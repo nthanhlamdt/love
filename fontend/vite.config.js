@@ -5,7 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/',
 
   server: {
     host: '0.0.0.0', // Cho phép kết nối từ mọi địa chỉ IP trong mạng LAN
