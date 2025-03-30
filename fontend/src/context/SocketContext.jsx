@@ -4,7 +4,7 @@ import { useAuthContext } from './authContext'
 import io from 'socket.io-client'
 
 const SocketContext = createContext()
-const SOCKET_URL = 'http://localhost:3000' // Đảm bảo URL đúng với server của bạn
+const SOCKET_URL = 'https://love-server.onrender.com' // Đảm bảo URL đúng với server của bạn
 
 export const useSocketContext = () => useContext(SocketContext)
 
