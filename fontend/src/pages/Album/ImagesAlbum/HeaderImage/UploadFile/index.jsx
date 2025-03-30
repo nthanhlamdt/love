@@ -5,7 +5,6 @@ import { useAlbumContext } from '~/context/albumContext'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import Loading from '~/components/Loading'
-import imageCompression from 'browser-image-compression'
 
 export default function UploadFile({ album }) {
   const fileInputRef = useRef(null)
@@ -15,15 +14,6 @@ export default function UploadFile({ album }) {
   const [loading, setLoading] = useState(false)
   const [uploadCount, setUploadCount] = useState(0)
   const [previewUrls, setPreviewUrls] = useState([])
-
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 100, // Kích thước tối đa 1MB
-      maxWidthOrHeight: 1920, // Resize nếu ảnh quá lớn
-      useWebWorker: true
-    }
-    return await imageCompression(file, options)
-  }
 
   const handleFileImageChange = async (e) => {
     const files = Array.from(e.target.files)
@@ -44,12 +34,11 @@ export default function UploadFile({ album }) {
       return true
     })
 
-    try {
-      const compressedFiles = await Promise.all(validFiles.map(compressImage))
-      const newFiles = []
+    const newFiles = []
 
+    try {
       await Promise.all(
-        compressedFiles.map(async (file) => {
+        validFiles.map(async (file) => {
           try {
             const dt = await addImageToAlbum({ albumId: album._id, file })
             newFiles.push(dt)
@@ -68,7 +57,7 @@ export default function UploadFile({ album }) {
           const updatedAlbums = [...prevAlbums]
           updatedAlbums[albumIndex] = {
             ...updatedAlbums[albumIndex],
-            images: [...newFiles, ...updatedAlbums[albumIndex].images]
+            images: [...newFiles, ...updatedAlbums[albumIndex].images],
           }
           return updatedAlbums
         })
@@ -78,7 +67,7 @@ export default function UploadFile({ album }) {
             type: 'add_file_album',
             title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
             phoneNumber: userlove.phoneNumber,
-            albumId: album._id
+            albumId: album._id,
           })
           toast.success(`Thêm ${newFiles.length} file thành công!`)
         } catch (error) {
@@ -86,7 +75,6 @@ export default function UploadFile({ album }) {
         }
       }
     } catch (error) {
-      console.error(error.message)
       toast.error('Lỗi khi tải lên tệp!')
     } finally {
       setLoading(false)
