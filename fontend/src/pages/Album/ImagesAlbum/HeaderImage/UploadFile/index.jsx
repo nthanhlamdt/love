@@ -21,14 +21,13 @@ export default function UploadFile({ album }) {
 
     // Kiểm tra loại tệp và kích thước
     const validFiles = files.filter((file, index) => {
-      const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/')
-      const isValidSize = file.size <= 100 * 1024 * 1024 // Giới hạn kích thước file dưới 100MB
+      const isValidSize = file.size <= 1000 * 1024 * 1024 // Giới hạn kích thước file dưới 100MB
 
       if (!isValidSize) {
         toast.error(`File thứ ${index + 1} có kích thước quá lớn (tối đa 100MB)`)
         return false
       }
-      return isValidType && isValidSize
+      return isValidSize
     })
 
     const newImages = []
