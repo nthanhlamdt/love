@@ -19,18 +19,9 @@ export default function UploadFile({ album }) {
     setLoading(true);
     setUploadCount(0);
 
-    // Kiểm tra định dạng file và kích thước
+    // Kiểm tra kích thước file
     const validFiles = files.filter((file, index) => {
-      const allowedTypes = [
-        'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'video/mp4'
-      ];
       const isValidSize = file.size <= 100 * 1024 * 1024; // Giới hạn 100MB
-      const isValidType = allowedTypes.includes(file.type);
-
-      if (!isValidType) {
-        toast.error(`File thứ ${index + 1} có định dạng không hợp lệ!`);
-        return false;
-      }
       if (!isValidSize) {
         toast.error(`File thứ ${index + 1} có kích thước quá lớn (tối đa 100MB)`);
         return false;
@@ -38,14 +29,14 @@ export default function UploadFile({ album }) {
       return true;
     });
 
-    const newImages = [];
+    const newFiles = [];
 
     try {
       await Promise.all(
         validFiles.map(async (file) => {
           try {
             const dt = await addImageToAlbum({ albumId: album._id, file });
-            newImages.push(dt);
+            newFiles.push(dt);
             setUploadCount((prev) => prev + 1);
           } catch (error) {
             toast.error(`Lỗi khi thêm file: ${file.name}`);
@@ -53,7 +44,7 @@ export default function UploadFile({ album }) {
         })
       );
 
-      if (newImages.length > 0) {
+      if (newFiles.length > 0) {
         setAlbums((prevAlbums) => {
           const albumIndex = prevAlbums.findIndex(a => a._id === id);
           if (albumIndex === -1) return prevAlbums;
@@ -61,19 +52,19 @@ export default function UploadFile({ album }) {
           const updatedAlbums = [...prevAlbums];
           updatedAlbums[albumIndex] = {
             ...updatedAlbums[albumIndex],
-            images: [...newImages, ...updatedAlbums[albumIndex].images],
+            images: [...newFiles, ...updatedAlbums[albumIndex].images],
           };
           return updatedAlbums;
         });
 
         try {
           await sendNotification({
-            type: 'add_image_album',
-            title: `Đã thêm ${newImages.length} ảnh vào album ${album.name}`,
+            type: 'add_file_album',
+            title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
             phoneNumber: userlove.phoneNumber,
             albumId: album._id,
           });
-          toast.success(`Thêm ${newImages.length} ảnh thành công!`);
+          toast.success(`Thêm ${newFiles.length} file thành công!`);
         } catch (error) {
           toast.error('Lỗi khi gửi thông báo!');
         }
@@ -102,13 +93,13 @@ export default function UploadFile({ album }) {
           className="hidden"
           ref={fileInputRef}
           onChange={handleFileImageChange}
-          accept="image/*, video/*"
+          accept="*/*"
         />
         <button
           onClick={() => fileInputRef.current?.click()}
           className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded flex items-center transition duration-300"
         >
-          <Upload className="mr-2" /> Thêm ảnh
+          <Upload className="mr-2" /> Thêm file
         </button>
       </div>
     </>
