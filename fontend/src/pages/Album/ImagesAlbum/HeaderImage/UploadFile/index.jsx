@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Upload } from 'lucide-react'
-import { addImageToAlbum, sendNotification } from '~/api/api'
+import { addImageToAlbum } from '~/api/api'
 import { useAlbumContext } from '~/context/albumContext'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -9,57 +9,45 @@ import Loading from '~/components/Loading'
 export default function UploadFile() {
   const fileInputRef = useRef(null)
   const { setAlbums } = useAlbumContext()
-  const userlove = JSON.parse(localStorage.getItem('userLove')) || {}
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
   const [uploadCount, setUploadCount] = useState(0)
 
   const handleFileImageChange = async (e) => {
     const files = Array.from(e.target.files)
+    if (files.length === 0) return
+
     setLoading(true)
     setUploadCount(0)
 
-    const newFiles = []
-
     try {
-      files.map(async (file) => {
-        try {
-          const dt = await addImageToAlbum({ albumId: id, file })
-          newFiles.push(dt)
-          setUploadCount((prev) => prev + 1)
-        } catch (error) {
-          toast.error(`Lỗi khi thêm file: ${file.name}`)
-        }
-      })
-
-      if (newFiles.length > 0) {
-        setAlbums((prevAlbums) => {
-          const albumIndex = prevAlbums.findIndex(a => a._id === id)
-          if (albumIndex === -1) return prevAlbums
-
-          const updatedAlbums = [...prevAlbums]
-          updatedAlbums[albumIndex] = {
-            ...updatedAlbums[albumIndex],
-            images: [...newFiles, ...updatedAlbums[albumIndex].images],
+      const uploadedFiles = await Promise.all(
+        files.map(async (file) => {
+          try {
+            return await addImageToAlbum({ albumId: id, file })
+          } catch (error) {
+            toast.error(`Lỗi khi thêm file: ${file.name}`)
+            return null
           }
+        })
+      )
+
+      const validFiles = uploadedFiles.filter(Boolean) // Lọc ra các tệp tải lên thành công
+
+      setUploadCount(validFiles.length)
+
+      if (validFiles.length > 0) {
+        setAlbums((prevAlbums) => {
+          const updatedAlbums = prevAlbums.map((album) =>
+            album._id === id
+              ? { ...album, images: [...validFiles, ...album.images] }
+              : album
+          )
           return updatedAlbums
         })
-
-        // try {
-        //   await sendNotification({
-        //     type: 'add_file_album',
-        //     title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
-        //     phoneNumber: userlove.phoneNumber,
-        //     albumId: album._id
-        //   })
-        //   toast.success(`Thêm ${newFiles.length} file thành công!`)
-        // } catch (error) {
-        //   toast.error('Lỗi khi gửi thông báo!')
-        // }
       }
     } catch (error) {
       toast.error('Lỗi khi tải lên tệp!')
-      setLoading(false)
     } finally {
       setLoading(false)
     }
