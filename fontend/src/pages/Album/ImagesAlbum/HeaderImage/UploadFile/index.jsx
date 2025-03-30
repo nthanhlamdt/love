@@ -15,6 +15,7 @@ export default function UploadFile() {
 
   const handleFileImageChange = async (e) => {
     const files = Array.from(e.target.files)
+    console.log(files)
     if (files.length === 0) return
 
     setLoading(true)
@@ -23,12 +24,7 @@ export default function UploadFile() {
     try {
       const uploadedFiles = await Promise.all(
         files.map(async (file) => {
-          try {
-            return await addImageToAlbum({ albumId: id, file })
-          } catch (error) {
-            toast.error(`Lỗi khi thêm file: ${file.name}`)
-            return null
-          }
+          return await addImageToAlbum({ albumId: id, file })
         })
       )
 
