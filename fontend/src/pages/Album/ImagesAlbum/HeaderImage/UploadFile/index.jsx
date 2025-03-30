@@ -18,9 +18,9 @@ export default function UploadFile({ album }) {
 
   const compressImage = async (file) => {
     const options = {
-      maxSizeMB: 1, // Kích thước tối đa 1MB
+      maxSizeMB: 100, // Kích thước tối đa 1MB
       maxWidthOrHeight: 1920, // Resize nếu ảnh quá lớn
-      useWebWorker: true,
+      useWebWorker: true
     }
     return await imageCompression(file, options)
   }
@@ -68,7 +68,7 @@ export default function UploadFile({ album }) {
           const updatedAlbums = [...prevAlbums]
           updatedAlbums[albumIndex] = {
             ...updatedAlbums[albumIndex],
-            images: [...newFiles, ...updatedAlbums[albumIndex].images],
+            images: [...newFiles, ...updatedAlbums[albumIndex].images]
           }
           return updatedAlbums
         })
@@ -78,7 +78,7 @@ export default function UploadFile({ album }) {
             type: 'add_file_album',
             title: `Đã thêm ${newFiles.length} file vào album ${album.name}`,
             phoneNumber: userlove.phoneNumber,
-            albumId: album._id,
+            albumId: album._id
           })
           toast.success(`Thêm ${newFiles.length} file thành công!`)
         } catch (error) {
@@ -86,6 +86,7 @@ export default function UploadFile({ album }) {
         }
       }
     } catch (error) {
+      console.error(error.message)
       toast.error('Lỗi khi tải lên tệp!')
     } finally {
       setLoading(false)
